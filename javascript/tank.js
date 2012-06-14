@@ -69,6 +69,12 @@ var Tank=new Class({
 				this.x=this.x + (Math.cos(this.a*Math.PI/8)*d*this.way);
 				this.y=this.y + (Math.sin(this.a*Math.PI/8)*d*this.way);
 				}
+			else if(sprite instanceof Rectangle)
+				{
+				/*var d=(this.r+sprite.r)-Math.ceil(Math.sqrt(((this.x-sprite.x)*(this.x-sprite.x))+((this.y-sprite.y)*(this.y-sprite.y))));
+				this.x=this.x + (Math.cos(this.a*Math.PI/8)*d*this.way);
+				this.y=this.y + (Math.sin(this.a*Math.PI/8)*d*this.way);*/
+				}
 			this.way=0;
 			}
 		return hit;
