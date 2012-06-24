@@ -19,6 +19,9 @@ var Sprite=new Class({
 		this.index=-1;
 		this.declarePositions();
 		},
+	pointHitPoint : function(point1,point2) {
+		return (point1.x == point2.x && point1.y == point2.y);
+		},
 	pointHitRectangle : function(point,rect) {
 		return (point.x >= rect.x 
 			&& point.x < rect.x + rect.w
@@ -80,6 +83,14 @@ var Sprite=new Class({
 			this.game.grid[newIndex].push(this);
 			this.index=newIndex;
 			}
+		},
+	remove : function() {
+		var index=this.game.sprites.indexOf(this);
+		if(index>=0)
+			this.game.sprites.splice(index,1);
+		index=this.game.controlableSprites.indexOf(this);
+		if(index>=0)
+			this.game.controlableSprites.splice(index,1);
 		},
 	destruct : function() {
 		}

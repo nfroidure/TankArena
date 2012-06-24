@@ -19,16 +19,17 @@ var Game=new Class({
 		if(noticeFunction)
 			this.notice=noticeFunction;
 		// Creating canvas
+		this.numCanvas=3;
 		while(element.childNodes[0])
 			element.removeChild(element.childNodes[0]);
 		this.canvas=new Array();
 		this.contexts=new Array();
-		for(var i=0; i<2; i++)
+		for(var i=0; i<this.numCanvas; i++)
 			this.canvas.push(document.createElement('canvas'));
 		this.wrapper=document.createElement('div');
 		if(this.canvas[0].getContext)
 			{
-			for(var i=0; i<2; i++)
+			for(var i=0; i<this.numCanvas; i++)
 				{
 				if(i>0)
 					{
@@ -58,7 +59,8 @@ var Game=new Class({
 		this.fps=25;
 		this.map={'w':100,'h':50,
 			'floorSet':[0,1,2,3],
-			'floors':[{'t':4,'x':1,'y':7},{'t':5,'x':1,'y':8},{'t':6,'x':2,'y':7},{'t':7,'x':2,'y':8}]};
+			'floors':[{'t':4,'x':1,'y':7},{'t':5,'x':1,'y':8},{'t':6,'x':2,'y':7},{'t':7,'x':2,'y':8},{'t':11,'x':8,'y':5},{'t':10,'x':9,'y':5},
+				{'t':10,'x':9,'y':5},{'t':10,'x':10,'y':5},{'t':10,'x':11,'y':5},{'t':10,'x':12,'y':5},{'t':12,'x':13,'y':5}]};
 		this.grid=new Array(this.map.h*this.map.w);
 		this.fit();
 		this.contexts[0].fillStyle = '#000000';
@@ -79,7 +81,7 @@ var Game=new Class({
 			this.drawTile(this.map.floors[i].t, this.map.floors[i].x*this.tileSize, this.map.floors[i].y*this.tileSize);
 			}
 		//this.playSound('bg');
-		this.sprites=new Array(new Tank(this,33,33,0),new Tank(this,165,165,0),new Building(this,330,132,0,8));
+		this.sprites=new Array(new Tank(this,33,33,1,0),new Tank(this,165,165,1,0),new Building(this,330,132,0,8),new Building(this,363,132,0,8),new Building(this,396,132,0,8));
 		this.controlableSprites=new Array(this.sprites[0],this.sprites[1]);
 		this.controlledSprite=0;
 		this.resume();
@@ -105,7 +107,7 @@ var Game=new Class({
 		this.canvas[0].width=this.map.w*this.tileSize*this.zoom;
 		this.canvas[0].height=this.map.h*this.tileSize*this.zoom;
 		this.canvas[0].setStyle('position','relative');
-		for(var i=1; i>0; i--)
+		for(var i=this.numCanvas-1; i>0; i--)
 			{
 			this.canvas[i].width=this.width;
 			this.canvas[i].height=this.height;
@@ -126,6 +128,7 @@ var Game=new Class({
 			this.canvas[0].setStyle('left',this.decalX+'px');
 			this.canvas[0].setStyle('top',this.decalY+'px');
 			this.clearTiles(1);
+			this.clearTiles(2);
 			for(var i=this.sprites.length-1; i>=0; i--)
 				{
 				// Moving movable sprites
@@ -165,7 +168,24 @@ var Game=new Class({
 							}
 						}
 					}
-				this.sprites[i].draw();
+				if(!this.sprites[i])
+					console.log('Sprites #'+i+' removed');
+				else
+					{
+					this.sprites[i].draw();
+					this.contexts[2].fillStyle='#FFFFFF';
+					this.contexts[2].strokeStyle='#FFFFFF';
+					this.contexts[2].fillRect((this.sprites[i].x*this.zoom)-2+this.decalX,(this.sprites[i].y*this.zoom)-2+this.decalY,4,4);
+					if(this.sprites[i] instanceof Circle)
+						{
+						this.contexts[2].beginPath();
+						this.contexts[2].arc((this.sprites[i].x*this.zoom)+this.decalX,(this.sprites[i].y*this.zoom)+this.decalY,this.sprites[i].r*this.zoom,0,Math.PI*2,true);
+						this.contexts[2].stroke();
+						this.contexts[2].closePath();
+						}
+					else if(this.sprites[i] instanceof Rectangle)
+						this.contexts[2].strokeRect((this.sprites[i].x*this.zoom)-2+this.decalX,(this.sprites[i].y*this.zoom)-2+this.decalY,(this.sprites[i].w*this.zoom)+4,(this.sprites[i].h*this.zoom)+4);
+					}
 				}
 			this.timer=this.main.delay(1000/this.fps, this);
 			}
@@ -180,6 +200,7 @@ var Game=new Class({
 		this.registerTileImage(this.rootPath+'sprites/floors.png');
 		this.registerTileImage(this.rootPath+'sprites/buildings.png');
 		this.registerTileImage(this.rootPath+'sprites/tank1.png');
+		this.registerTileImage(this.rootPath+'sprites/animations.png');
 		},
 	registerTileImage : function(uri) {
 		var n=this.images.length;
@@ -192,8 +213,12 @@ var Game=new Class({
 				{'i':0,'x':6,'y':8,'label':'Water BL 1'},
 				{'i':0,'x':7,'y':7,'label':'Water TR 1'},
 				{'i':0,'x':7,'y':8,'label':'Water BR 1'},
-				{'i':1,'x':0,'y':0,'label':'Tunnel GV 1'},
-				{'i':2,'x':0,'y':0,'label':'Tank 1'}];
+				{'i':1,'x':0,'y':11,'label':'Hangar GV 1'},
+				{'i':2,'x':0,'y':0,'label':'Tank 1'},
+				{'i':0,'x':3,'y':36,'label':'Road 1'},
+				{'i':0,'x':1,'y':36,'label':'Road 2'},
+				{'i':0,'x':4,'y':36,'label':'Road 3'},
+				{'i':3,'x':0,'y':6,'label':'Shot'}];
 		this.images[n].src = uri;
 		this.loadingTiles++;
 		this.images[n].onload = this.tileImageLoaded.bind(this);
@@ -307,6 +332,7 @@ var Game=new Class({
 				this.controlledSprite=(this.controlledSprite+1)%this.controlableSprites.length;
 				break;
 			case 'space':
+				this.controlableSprites[this.controlledSprite].fire();
 			default:
 				used=false;
 				break;

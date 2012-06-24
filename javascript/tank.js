@@ -11,10 +11,11 @@
 
 var Tank=new Class({
 	Extends: Circle,
-	initialize: function(game, x, y, a) {
+	initialize: function(game, x, y, z, a) {
 		this.parent(game, x, y, 1, 12);
 		this.direction=0;
 		this.a=a; // Angle %pi/8 [0-16]
+		this.z=(z?z:1);
 		this.turretDirection=0;
 		this.ta=a;
 		this.way=0;
@@ -48,9 +49,11 @@ var Tank=new Class({
 		this.x=this.prevX;
 		this.y=this.prevY;
 		},
-	draw : function() {
+	draw : function() {/*
 		this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.r, this.y-this.r, this.z, 1, 1);
-		this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.r, this.y-this.r, this.z, 1, 1);
+		this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.r, this.y-this.r, this.z, 1, 1);*/
+		this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+		this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 		},
 	setDirection : function(direction,turret) {
 		if(direction==0)
@@ -63,8 +66,11 @@ var Tank=new Class({
 	setWay : function(way) {
 		this.way=way;
 		},
+	fire : function() {
+		this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
+		},
 	hit : function(sprite) {
-		var hit=this.parent(sprite);
+		var hit=(sprite instanceof Shot?false:this.parent(sprite));
 		if(hit&&this.speed)
 			{
 			this.speed=-(this.speed);
