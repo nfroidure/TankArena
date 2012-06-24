@@ -72,7 +72,7 @@ var Sprite=new Class({
 		var newIndex=Math.floor(this.x/33)+'-'+Math.floor(this.y/33);
 		if(newIndex!=this.index)
 			{
-			console.log('"'+this.index+' -> '+newIndex+'"');
+			console.log('"'+this.index+' -> '+newIndex+'":'+this.x+','+this.y);
 			if(this.index!=-1)
 				this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);
 			if(!this.game.grid[newIndex])

@@ -22,6 +22,8 @@ var Tank=new Class({
 		this.maxSpeed=6;
 		},
 	move : function() {
+		this.prevX=this.x;
+		this.prevY=this.y;
 		if(this.direction!=0)
 			this.a=(16+this.a+this.direction)%16;
 		if(this.turretDirection!=0)
@@ -41,6 +43,10 @@ var Tank=new Class({
 		this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
 		this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
 		this.declarePositions();
+		},
+	rewind : function() {
+		this.x=this.prevX;
+		this.y=this.prevY;
 		},
 	draw : function() {
 		this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.r, this.y-this.r, this.z, 1, 1);
@@ -63,18 +69,6 @@ var Tank=new Class({
 			{
 			this.speed=-(this.speed);
 			this.way=-this.way;
-			if(sprite instanceof Circle)
-				{
-				var d=(this.r+sprite.r)-Math.ceil(Math.sqrt(((this.x-sprite.x)*(this.x-sprite.x))+((this.y-sprite.y)*(this.y-sprite.y))));
-				this.x=this.x + (Math.cos(this.a*Math.PI/8)*d*this.way);
-				this.y=this.y + (Math.sin(this.a*Math.PI/8)*d*this.way);
-				}
-			else if(sprite instanceof Rectangle)
-				{
-				/*var d=(this.r+sprite.r)-Math.ceil(Math.sqrt(((this.x-sprite.x)*(this.x-sprite.x))+((this.y-sprite.y)*(this.y-sprite.y))));
-				this.x=this.x + (Math.cos(this.a*Math.PI/8)*d*this.way);
-				this.y=this.y + (Math.sin(this.a*Math.PI/8)*d*this.way);*/
-				}
 			this.way=0;
 			}
 		return hit;

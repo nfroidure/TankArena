@@ -56,7 +56,7 @@ var Game=new Class({
 	reset : function() {
 		this.zoom=2;
 		this.fps=25;
-		this.map={'w':300,'h':150,
+		this.map={'w':100,'h':50,
 			'floorSet':[0,1,2,3],
 			'floors':[{'t':4,'x':1,'y':7},{'t':5,'x':1,'y':8},{'t':6,'x':2,'y':7},{'t':7,'x':2,'y':8}]};
 		this.grid=new Array(this.map.h*this.map.w);
@@ -102,8 +102,9 @@ var Game=new Class({
 		this.wrapper.setStyle('overflow','hidden');
 		this.wrapper.setStyle('width',size.x+'px');
 		this.wrapper.setStyle('height',size.y+'px');
-		this.canvas[0].width=this.map.w*this.tileSize;
-		this.canvas[0].height=this.map.h*this.tileSize;
+		this.canvas[0].width=this.map.w*this.tileSize*this.zoom;
+		this.canvas[0].height=this.map.h*this.tileSize*this.zoom;
+		this.canvas[0].setStyle('position','relative');
 		for(var i=1; i>0; i--)
 			{
 			this.canvas[i].width=this.width;
@@ -114,30 +115,50 @@ var Game=new Class({
 	main : function() {
 		if(this.timer)
 			{
+			// Fixing game view
+			this.decalX=-Math.round((this.controlableSprites[this.controlledSprite].x*this.zoom)-(this.width/2));
+			this.decalX=(this.decalX>0?0:this.decalX);
+			this.decalX=(this.decalX<-((this.map.w*this.tileSize*this.zoom)-this.width)?-((this.map.w*this.tileSize*this.zoom)-this.width):this.decalX);
+			this.decalY=-Math.round((this.controlableSprites[this.controlledSprite].y*this.zoom)-(this.height/2));
+			this.decalY=(this.decalY>0?0:this.decalY);
+			this.decalY=(this.decalY<-((this.map.h*this.tileSize*this.zoom)-this.height)?-((this.map.h*this.tileSize*this.zoom)-this.height):this.decalY);
+			//console.log('View:'+this.controlableSprites[this.controlledSprite].x+'-('+this.width+'/2)'+'='+x+','+this.controlableSprites[this.controlledSprite].y+'-('+this.height+'/2)'+'='+y);
+			this.canvas[0].setStyle('left',this.decalX+'px');
+			this.canvas[0].setStyle('top',this.decalY+'px');
 			this.clearTiles(1);
 			for(var i=this.sprites.length-1; i>=0; i--)
 				{
+				// Moving movable sprites
 				if(this.sprites[i].move)
-					this.sprites[i].move();
-				var pos=this.sprites[i].index.split('-');
-				for(var k=(pos[0]>3?parseInt(pos[0])-3:0), l=(pos[0]<this.map.w-3?parseInt(pos[0])+3:this.map.w); k<l; k++)
 					{
-					for(var m=(pos[1]>3?parseInt(pos[1])-3:0), n=(pos[1]<this.map.h-3?parseInt(pos[1])+3:this.map.h); m<n; m++)
+					this.sprites[i].move();
+					// Getting grid pos
+					var pos=this.sprites[i].index.split('-');
+					var hitField=3;
+					// Game limits (could create a "inside" function to test if sprites are in the rectangle the game represents)
+					if(((this.sprites[i] instanceof Circle)&&(this.sprites[i].x-this.sprites[i].r<0||this.sprites[i].y-this.sprites[i].r<0||this.sprites[i].x+this.sprites[i].r>this.map.w*this.tileSize||this.sprites[i].y+this.sprites[i].r>this.map.h*this.tileSize))
+					||((this.sprites[i] instanceof Point)&&(this.sprites[i].x<0||this.sprites[i].y<0||this.sprites[i].x>this.map.w*this.tileSize||this.sprites[i].y>this.map.h*this.tileSize))
+					||((this.sprites[i] instanceof Rectangle)&&(this.sprites[i].x<0||this.sprites[i].y<0||this.sprites[i].x+this.sprites[i].w>this.map.w*this.tileSize||this.sprites[i].y+this.sprites[i].h>this.map.h*this.tileSize)))
 						{
-						if(this.grid[k+'-'+m]&&this.grid[k+'-'+m].length)
+						if(this.sprites[i].rewind)
+							this.sprites[i].rewind();
+						}
+					// Hits
+					for(var k=(pos[0]>hitField?parseInt(pos[0])-hitField:0), l=(pos[0]<this.map.w-hitField?parseInt(pos[0])+hitField:this.map.w); k<l; k++)
+						{
+						for(var m=(pos[1]>hitField?parseInt(pos[1])-hitField:0), n=(pos[1]<this.map.h-hitField?parseInt(pos[1])+hitField:this.map.h); m<n; m++)
 							{
-							for(var j=this.grid[k+'-'+m].length-1; j>=0; j--)
+							if(this.grid[k+'-'+m]&&this.grid[k+'-'+m].length)
 								{
-								if(this.sprites[i]!=this.grid[k+'-'+m][j]&&this.sprites[i].hit)
+								for(var j=this.grid[k+'-'+m].length-1; j>=0; j--)
 									{
-									if(this.sprites[i].hit(this.grid[k+'-'+m][j]))
+									if(this.sprites[i]!=this.grid[k+'-'+m][j]&&this.sprites[i].hit)
 										{
-										console.log('hit');
-										}
-									else
-										{
-										//console.log(pos[0]+':'+pos[1]+'-'+k+':'+l+'-'+m+':'+n);
-										//console.log('nohit');
+										if(this.sprites[i].hit(this.grid[k+'-'+m][j]))
+											{
+											if(this.sprites[i].rewind)
+												this.sprites[i].rewind();
+											}
 										}
 									}
 								}
@@ -190,7 +211,7 @@ var Game=new Class({
 		},
 	drawImage : function(i, srcX, srcY, x, y, z, w, h) {
 		this.contexts[(z?z:0)].drawImage(this.images[i], this.tileSize*srcX, this.tileSize*srcY,
-			this.tileSize*(w?w:1), this.tileSize*(h?h:1), this.zoom*x, this.zoom*y, this.zoom*this.tileSize*(w?w:1), this.zoom*this.tileSize*(h?h:1));
+			this.tileSize*(w?w:1), this.tileSize*(h?h:1), (this.zoom*x)+(z>0?this.decalX:0), (this.zoom*y)+(z>0?this.decalY:0), this.zoom*this.tileSize*(w?w:1), this.zoom*this.tileSize*(h?h:1));
 		},
 	clearTiles : function(z) {
 		this.contexts[(z?z:0)].clearRect(0,0,this.canvas[(z?z:0)].width,this.canvas[(z?z:0)].height);
@@ -243,6 +264,10 @@ var Game=new Class({
 		},
 	keyDownHandler : function(e) {
 		var used=true;
+		if(e.code==107)
+			this.fps++;
+		else if(e.code==109)
+			this.fps--;
 		switch(e.key)
 			{
 			case 'down':

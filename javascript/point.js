@@ -9,7 +9,7 @@
  *
  */
 
-var Circle=new Class({
+var Point=new Class({
 	Extends: Sprite,
 	initialize: function(game, x, y, z) {
 		this.parent(game, x, y, z);
