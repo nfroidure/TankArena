@@ -10,9 +10,9 @@
  */
 
 var Tank=new Class({
-	Extends: Circle,
+	Extends: Sprite,
 	initialize: function(game, x, y, z, a) {
-		this.parent(game, x, y, 1, 12);
+		this.parent(game, x, y, z);
 		this.direction=0;
 		this.a=a; // Angle %pi/8 [0-16]
 		this.z=(z?z:1);
@@ -23,6 +23,7 @@ var Tank=new Class({
 		this.maxSpeed=6;
 		this.solidity=2;
 		this.life=100;
+		this.shapes.push(new Circle(this.x,this.y,this.z, 12));
 		},
 	move : function() {
 		this.prevX=this.x;
@@ -43,8 +44,8 @@ var Tank=new Class({
 			this.speed--;
 		else if(this.speed<0)
 			this.speed++;
-		this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
-		this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
+		this.shapes[0].x=this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
+		this.shapes[0].y=this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
 		this.declarePositions();
 		},
 	rewind : function() {
@@ -61,6 +62,7 @@ var Tank=new Class({
 			{
 			this.game.drawImage(2, 7, 4, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			}
+		this.parent();
 		},
 	setDirection : function(direction,turret) {
 		if(direction==0||this.life<1)

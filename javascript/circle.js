@@ -10,23 +10,23 @@
  */
 
 var Circle=new Class({
-	Extends: Sprite,
-	initialize: function(game, x, y, z, r) {
-		this.parent(game, x, y, z);
+	Extends: Shape,
+	initialize: function(x, y, z, r) {
+		this.parent(x, y, z);
 		this.r=r;
 		},
-	hit : function(sprite) {
-		if(sprite instanceof Rectangle)
+	hit : function(shape) {
+		if(shape instanceof Rectangle)
 			{
-			return this.circleHitRectangle(this,sprite);
+			return this.circleHitRectangle(this,shape);
 			}
-		else if(sprite instanceof Circle)
+		else if(shape instanceof Circle)
 			{
-			return this.circleHitCircle(sprite,this);
+			return this.circleHitCircle(shape,this);
 			}
-		else if(sprite instanceof Point)
+		else if(shape instanceof Point)
 			{
-			return this.pointHitCircle(sprite,this);
+			return this.pointHitCircle(shape,this);
 			}
 		else
 			console.log('Unexpected collision !');

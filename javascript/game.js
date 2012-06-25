@@ -44,7 +44,9 @@ var Game=new Class({
 					}
 				this.contexts[i]=this.canvas[i].getContext('2d');
 				}
-			//this.reset();
+			// Setting debug canvas styles
+			this.contexts[this.numCanvas-1].fillStyle='#FFFFFF';
+			this.contexts[this.numCanvas-1].strokeStyle='#FFFFFF';
 			this.initEvents();
 			this.initTiles(this.reset.bind(this));
 			this.initSounds();
@@ -174,18 +176,6 @@ var Game=new Class({
 				else
 					{
 					curSprite.draw();
-					this.contexts[2].fillStyle='#FFFFFF';
-					this.contexts[2].strokeStyle='#FFFFFF';
-					this.contexts[2].fillRect((curSprite.x*this.zoom)-2+this.decalX,(curSprite.y*this.zoom)-2+this.decalY,4,4);
-					if(curSprite instanceof Circle)
-						{
-						this.contexts[2].beginPath();
-						this.contexts[2].arc((curSprite.x*this.zoom)+this.decalX,(curSprite.y*this.zoom)+this.decalY,curSprite.r*this.zoom,0,Math.PI*2,true);
-						this.contexts[2].stroke();
-						this.contexts[2].closePath();
-						}
-					else if(curSprite instanceof Rectangle)
-						this.contexts[2].strokeRect((curSprite.x*this.zoom)-2+this.decalX,(curSprite.y*this.zoom)-2+this.decalY,(curSprite.w*this.zoom)+4,(curSprite.h*this.zoom)+4);
 					}
 				}
 			this.timer=this.main.delay(1000/this.fps, this);

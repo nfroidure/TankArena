@@ -10,22 +10,22 @@
  */
 
 var Point=new Class({
-	Extends: Sprite,
-	initialize: function(game, x, y, z) {
-		this.parent(game, x, y, z);
+	Extends: Shape,
+	initialize: function(x, y, z) {
+		this.parent(x, y, z);
 		},
-	hit : function(sprite) {
-		if(sprite instanceof Point)
+	hit : function(shape) {
+		if(shape instanceof Point)
 			{
-			return this.pointHitPoint(this,sprite);
+			return this.pointHitPoint(this,shape);
 			}
-		else if(sprite instanceof Rectangle)
+		else if(shape instanceof Rectangle)
 			{
-			return this.pointHitRectangle(this,sprite);
+			return this.pointHitRectangle(this,shape);
 			}
-		else if(sprite instanceof Circle)
+		else if(shape instanceof Circle)
 			{
-			return this.pointHitCircle(this,sprite);
+			return this.pointHitCircle(this,shape);
 			}
 		else
 			console.log('Unexpected collision !');

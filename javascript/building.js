@@ -10,7 +10,7 @@
  */
 
 var Building=new Class({
-	Extends: Rectangle,
+	Extends: Sprite,
 	initialize: function(game, x, y, z, t) {
 		this.parent(game, x, y, z);
 		this.t=t;
@@ -19,10 +19,12 @@ var Building=new Class({
 		this.solidity=1;
 		this.life=100;
 		this.declarePositions();
+		this.shapes.push(new Rectangle(this.x,this.y,this.z,this.w,this.h));
 		},
 	draw : function() {
 		this.game.drawTile(this.game.map.floorSet[0], this.x, this.y, this.z);
 		this.game.drawTile(this.t[2-Math.ceil(this.life/100*2)], this.x, this.y, this.z);
+		this.parent();
 		},
 	damage : function(power) {
 		if(this.life>0)
