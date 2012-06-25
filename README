@@ -5,3 +5,11 @@ Thanks to Jorrit Rowe and Dennis Medema i could use the original graphics of the
 You're welcome to push you own commits !
 
 I wrote an article about the way i'll do it on my blog and i'll publish a roadmap for the game (in french). English versions will come soon.
+
+XXX CONTROLS XXX
+- Keyboard arrows to move tanks.
+- Ctrl + left/right to rotate the tank turret.
+- Tab to switch tank
+- Space to fire
+- +/- to change frame per seconds
+- Ctrl +/- to change zoom

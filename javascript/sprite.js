@@ -91,9 +91,9 @@ var Sprite=new Class({
 		index=this.game.controlableSprites.indexOf(this);
 		if(index>=0)
 			this.game.controlableSprites.splice(index,1);
-		if(index==this.game.controledSprite)
+		if(index==this.game.controlledSprite)
 			{
-			this.game.controlledSprite=this.game.controledSprite%this.game.controlableSprite.length;
+			this.game.controlledSprite=this.game.controlledSprite%this.game.controlableSprites.length;
 			}
 		if(this.index!=-1)
 			this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);

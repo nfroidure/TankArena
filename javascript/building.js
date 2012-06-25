@@ -30,8 +30,9 @@ var Building=new Class({
 			this.life=this.life-Math.ceil(power/this.solidity);
 			console.log('Building damaged:'+this.life);
 			}
-		else
+		if(this.life<1)
 			{
+			this.life=0;
 			this.draw();
 			this.remove();
 			console.log('Building removed:'+this.life);

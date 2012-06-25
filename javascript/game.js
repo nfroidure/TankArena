@@ -63,23 +63,6 @@ var Game=new Class({
 				{'t':10,'x':9,'y':5},{'t':10,'x':10,'y':5},{'t':10,'x':11,'y':5},{'t':10,'x':12,'y':5},{'t':12,'x':13,'y':5}]};
 		this.grid=new Array(this.map.h*this.map.w);
 		this.fit();
-		this.contexts[0].fillStyle = '#000000';
-		this.contexts[0].textBaseline='top';
-		this.contexts[0].font='10px Helvetica bold, sans-serif';
-		this.contexts[0].textAlign='left';
-		for(var i=this.map.w-1; i>=0; i--)
-			{
-			for(var j=this.map.h-1; j>=0; j--)
-				{
-				var floor=this.map.floorSet[(i+j)%this.map.floorSet.length];
-				this.drawTile(floor, i*this.tileSize, j*this.tileSize);
-				this.contexts[0].fillText(i+'-'+j,( i*this.tileSize*this.zoom)+5, (j*this.tileSize*this.zoom)+5, 33*this.zoom);
-				}
-			}
-		for(var i=this.map.floors.length-1; i>=0; i--)
-			{
-			this.drawTile(this.map.floors[i].t, this.map.floors[i].x*this.tileSize, this.map.floors[i].y*this.tileSize);
-			}
 		//this.playSound('bg');
 		this.sprites=new Array(new Tank(this,33,33,1,0),new Tank(this,165,165,1,0),new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
 		this.controlableSprites=new Array(this.sprites[0],this.sprites[1]);
@@ -112,6 +95,23 @@ var Game=new Class({
 			this.canvas[i].width=this.width;
 			this.canvas[i].height=this.height;
 			this.canvas[i].setStyle('display','block');
+			}
+		this.contexts[0].fillStyle = '#000000';
+		this.contexts[0].textBaseline='top';
+		this.contexts[0].font='10px Helvetica bold, sans-serif';
+		this.contexts[0].textAlign='left';
+		for(var i=this.map.w-1; i>=0; i--)
+			{
+			for(var j=this.map.h-1; j>=0; j--)
+				{
+				var floor=this.map.floorSet[(i+j)%this.map.floorSet.length];
+				this.drawTile(floor, i*this.tileSize, j*this.tileSize);
+				this.contexts[0].fillText(i+'-'+j,( i*this.tileSize*this.zoom)+5, (j*this.tileSize*this.zoom)+5, 33*this.zoom);
+				}
+			}
+		for(var i=this.map.floors.length-1; i>=0; i--)
+			{
+			this.drawTile(this.map.floors[i].t, this.map.floors[i].x*this.tileSize, this.map.floors[i].y*this.tileSize);
 			}
 		},
 	main : function() {
@@ -292,10 +292,29 @@ var Game=new Class({
 		},
 	keyDownHandler : function(e) {
 		var used=true;
-		if(e.code==107)
-			this.fps++;
-		else if(e.code==109)
-			this.fps--;
+		if(e.control)
+			{
+			if(e.code==107)
+				{
+				this.zoom++;
+				this.fit();
+				e.stop();
+				}
+			else if(e.code==109)
+				{
+				this.zoom--;
+				this.zoom=(this.zoom<1?1:this.zoom);
+				this.fit();
+				e.stop();
+				}
+			}
+		else
+			{
+			if(e.code==107)
+				this.fps++;
+			else if(e.code==109)
+				{ this.fps--; this.fps=(this.fps<0?0:this.fps); }
+			}
 		switch(e.key)
 			{
 			case 'down':
