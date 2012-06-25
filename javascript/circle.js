@@ -31,6 +31,22 @@ var Circle=new Class({
 		else
 			console.log('Unexpected collision !');
 		},
+	inside : function(shape) {
+		if(shape instanceof Rectangle)
+			{
+			return this.rectangleInsideCircle(this,shape);
+			}
+		else if(shape instanceof Circle)
+			{
+			return this.circleInsideCircle(shape,this);
+			}
+		else if(shape instanceof Point)
+			{
+			return this.pointHitCircle(shape,this);
+			}
+		else
+			console.log('Unexpected collision !');
+		},
 	destruct : function() {
 		}
 });

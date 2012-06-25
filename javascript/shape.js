@@ -67,6 +67,30 @@ var Shape=new Class({
 			return false;
 		return true;
 		},
+	circleInsideCircle : function(circ1,circ2) {
+		return (circ1.x-circ1.r>circ2.x-circ2.r
+						&&circ1.x+circ1.r<circ2.x+circ2.r
+						&&circ1.y-circ1.r>circ2.y-circ2.r
+						&&circ1.y+circ1.r<circ2.y+circ2.r);
+		},
+	circleInsideRectangle : function(circ,rect) {
+		/*console.log('circIR'
+			+circ.x+'-'+circ.r+'>'+rect.x
+			+'&&'+circ.x+'+'+circ.r+'<'+rect.x+'+'+rect.w
+			+'&&'+circ.y+'-'+circ.r+'>'+rect.y
+			+'&&'+circ.y+'+'+circ.r+'<'+rect.y+'+'+rect.h
+			);*/
+		return (circ.x-circ.r>rect.x
+						&&circ.x+circ.r<rect.x+rect.w
+						&&circ.y-circ.r>rect.y
+						&&circ.y+circ.r<rect.y+rect.h);
+		},
+	rectangleInsideCircle : function(rect,circ) {
+		return (rect.x>circ.x-circ.r
+						&&rect.x+rect.w<circ.x+circ.r
+						&&rect.y>circ.y-circ.r
+						&&rect.y+rect.h<circ.y+circ.r);
+		},
 	destruct : function() {
 		}
 });

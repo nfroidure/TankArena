@@ -142,12 +142,15 @@ var Game=new Class({
 					var pos=curSprite.index.split('-');
 					var hitField=3;
 					// Game limits (could create a "inside" function to test if sprites are in the rectangle the game represents)
-					if(((curSprite instanceof Circle)&&(curSprite.x-curSprite.r<0||curSprite.y-curSprite.r<0||curSprite.x+curSprite.r>this.map.w*this.tileSize||curSprite.y+curSprite.r>this.map.h*this.tileSize))
-					||((curSprite instanceof Point)&&(curSprite.x<0||curSprite.y<0||curSprite.x>this.map.w*this.tileSize||curSprite.y>this.map.h*this.tileSize))
-					||((curSprite instanceof Rectangle)&&(curSprite.x<0||curSprite.y<0||curSprite.x+curSprite.w>this.map.w*this.tileSize||curSprite.y+curSprite.h>this.map.h*this.tileSize)))
+					this.gameRect=new Rectangle(0,0,0,this.map.w*this.tileSize,this.map.h*this.tileSize);
+					for(var j=curSprite.shapes.length-1; j>=0; j--)
 						{
-						if(curSprite.rewind)
-							curSprite.rewind();
+						if(!this.gameRect.inside(curSprite.shapes[j]))
+							{
+							if(curSprite.rewind)
+								curSprite.rewind();
+							break;
+							}
 						}
 					// Hits
 					for(var k=(pos[0]>hitField?parseInt(pos[0])-hitField:0), l=(pos[0]<this.map.w-hitField?parseInt(pos[0])+hitField:this.map.w); k<l; k++)

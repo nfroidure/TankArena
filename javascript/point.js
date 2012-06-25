@@ -30,6 +30,22 @@ var Point=new Class({
 		else
 			console.log('Unexpected collision !');
 		},
+	inside : function(shape) {
+		if(shape instanceof Point)
+			{
+			return this.pointHitPoint(this,shape);
+			}
+		else if(shape instanceof Rectangle)
+			{
+			return false;
+			}
+		else if(shape instanceof Circle)
+			{
+			return false;
+			}
+		else
+			console.log('Unexpected inclusion !');
+		},
 	destruct : function() {
 		}
 });
