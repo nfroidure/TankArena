@@ -16,10 +16,26 @@ var Building=new Class({
 		this.t=t;
 		this.w=this.game.tileSize;
 		this.h=this.game.tileSize;
+		this.solidity=1;
+		this.life=100;
 		this.declarePositions();
 		},
 	draw : function() {
-		this.game.drawTile(this.t, this.x, this.y);
+		this.game.drawTile(this.game.map.floorSet[0], this.x, this.y, this.z);
+		this.game.drawTile(this.t[2-Math.ceil(this.life/100*2)], this.x, this.y, this.z);
+		},
+	damage : function(power) {
+		if(this.life>0)
+			{
+			this.life=this.life-Math.ceil(power/this.solidity);
+			console.log('Building damaged:'+this.life);
+			}
+		else
+			{
+			this.draw();
+			this.remove();
+			console.log('Building removed:'+this.life);
+			}
 		},
 	destruct : function() {
 		}

@@ -21,6 +21,8 @@ var Tank=new Class({
 		this.way=0;
 		this.speed=0;
 		this.maxSpeed=6;
+		this.solidity=2;
+		this.life=100;
 		},
 	move : function() {
 		this.prevX=this.x;
@@ -49,25 +51,46 @@ var Tank=new Class({
 		this.x=this.prevX;
 		this.y=this.prevY;
 		},
-	draw : function() {/*
-		this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.r, this.y-this.r, this.z, 1, 1);
-		this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.r, this.y-this.r, this.z, 1, 1);*/
-		this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
-		this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+	draw : function() {
+		if(this.life>0)
+			{
+			this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			}
+		else
+			{
+			this.game.drawImage(2, 7, 4, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			}
 		},
 	setDirection : function(direction,turret) {
-		if(direction==0)
-			this.direction=this.turretDirection=direction;
+		if(direction==0||this.life<1)
+			this.direction=this.turretDirection=0;
 		else if(turret)
 			this.turretDirection=direction;
 		else
 			this.direction=direction;
 		},
 	setWay : function(way) {
+		if(way==0||this.life<1)
+			this.way=0;
+		else
 		this.way=way;
 		},
+	damage : function(power) {
+		if(this.life>0)
+			{
+			this.life=this.life-Math.ceil(power/this.solidity);
+			console.log('Tank damaged:'+this.life);
+			}
+		else
+			{
+			this.remove();
+			console.log('Tank removed:'+this.life);
+			}
+		},
 	fire : function() {
-		this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
+		if(this.life>0)
+			this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
 		},
 	hit : function(sprite) {
 		var hit=(sprite instanceof Shot?false:this.parent(sprite));

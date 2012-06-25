@@ -81,7 +81,7 @@ var Game=new Class({
 			this.drawTile(this.map.floors[i].t, this.map.floors[i].x*this.tileSize, this.map.floors[i].y*this.tileSize);
 			}
 		//this.playSound('bg');
-		this.sprites=new Array(new Tank(this,33,33,1,0),new Tank(this,165,165,1,0),new Building(this,330,132,0,8),new Building(this,363,132,0,8),new Building(this,396,132,0,8));
+		this.sprites=new Array(new Tank(this,33,33,1,0),new Tank(this,165,165,1,0),new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
 		this.controlableSprites=new Array(this.sprites[0],this.sprites[1]);
 		this.controlledSprite=0;
 		this.resume();
@@ -131,20 +131,21 @@ var Game=new Class({
 			this.clearTiles(2);
 			for(var i=this.sprites.length-1; i>=0; i--)
 				{
+				var curSprite=this.sprites[i];
 				// Moving movable sprites
-				if(this.sprites[i].move)
+				if(curSprite&&curSprite.move)
 					{
-					this.sprites[i].move();
+					curSprite.move();
 					// Getting grid pos
-					var pos=this.sprites[i].index.split('-');
+					var pos=curSprite.index.split('-');
 					var hitField=3;
 					// Game limits (could create a "inside" function to test if sprites are in the rectangle the game represents)
-					if(((this.sprites[i] instanceof Circle)&&(this.sprites[i].x-this.sprites[i].r<0||this.sprites[i].y-this.sprites[i].r<0||this.sprites[i].x+this.sprites[i].r>this.map.w*this.tileSize||this.sprites[i].y+this.sprites[i].r>this.map.h*this.tileSize))
-					||((this.sprites[i] instanceof Point)&&(this.sprites[i].x<0||this.sprites[i].y<0||this.sprites[i].x>this.map.w*this.tileSize||this.sprites[i].y>this.map.h*this.tileSize))
-					||((this.sprites[i] instanceof Rectangle)&&(this.sprites[i].x<0||this.sprites[i].y<0||this.sprites[i].x+this.sprites[i].w>this.map.w*this.tileSize||this.sprites[i].y+this.sprites[i].h>this.map.h*this.tileSize)))
+					if(((curSprite instanceof Circle)&&(curSprite.x-curSprite.r<0||curSprite.y-curSprite.r<0||curSprite.x+curSprite.r>this.map.w*this.tileSize||curSprite.y+curSprite.r>this.map.h*this.tileSize))
+					||((curSprite instanceof Point)&&(curSprite.x<0||curSprite.y<0||curSprite.x>this.map.w*this.tileSize||curSprite.y>this.map.h*this.tileSize))
+					||((curSprite instanceof Rectangle)&&(curSprite.x<0||curSprite.y<0||curSprite.x+curSprite.w>this.map.w*this.tileSize||curSprite.y+curSprite.h>this.map.h*this.tileSize)))
 						{
-						if(this.sprites[i].rewind)
-							this.sprites[i].rewind();
+						if(curSprite.rewind)
+							curSprite.rewind();
 						}
 					// Hits
 					for(var k=(pos[0]>hitField?parseInt(pos[0])-hitField:0), l=(pos[0]<this.map.w-hitField?parseInt(pos[0])+hitField:this.map.w); k<l; k++)
@@ -155,12 +156,12 @@ var Game=new Class({
 								{
 								for(var j=this.grid[k+'-'+m].length-1; j>=0; j--)
 									{
-									if(this.sprites[i]!=this.grid[k+'-'+m][j]&&this.sprites[i].hit)
+									if(curSprite!=this.grid[k+'-'+m][j]&&curSprite.hit)
 										{
-										if(this.sprites[i].hit(this.grid[k+'-'+m][j]))
+										if(curSprite.hit(this.grid[k+'-'+m][j]))
 											{
-											if(this.sprites[i].rewind)
-												this.sprites[i].rewind();
+											if(curSprite.rewind)
+												curSprite.rewind();
 											}
 										}
 									}
@@ -168,23 +169,23 @@ var Game=new Class({
 							}
 						}
 					}
-				if(!this.sprites[i])
+				if(!curSprite)
 					console.log('Sprites #'+i+' removed');
 				else
 					{
-					this.sprites[i].draw();
+					curSprite.draw();
 					this.contexts[2].fillStyle='#FFFFFF';
 					this.contexts[2].strokeStyle='#FFFFFF';
-					this.contexts[2].fillRect((this.sprites[i].x*this.zoom)-2+this.decalX,(this.sprites[i].y*this.zoom)-2+this.decalY,4,4);
-					if(this.sprites[i] instanceof Circle)
+					this.contexts[2].fillRect((curSprite.x*this.zoom)-2+this.decalX,(curSprite.y*this.zoom)-2+this.decalY,4,4);
+					if(curSprite instanceof Circle)
 						{
 						this.contexts[2].beginPath();
-						this.contexts[2].arc((this.sprites[i].x*this.zoom)+this.decalX,(this.sprites[i].y*this.zoom)+this.decalY,this.sprites[i].r*this.zoom,0,Math.PI*2,true);
+						this.contexts[2].arc((curSprite.x*this.zoom)+this.decalX,(curSprite.y*this.zoom)+this.decalY,curSprite.r*this.zoom,0,Math.PI*2,true);
 						this.contexts[2].stroke();
 						this.contexts[2].closePath();
 						}
-					else if(this.sprites[i] instanceof Rectangle)
-						this.contexts[2].strokeRect((this.sprites[i].x*this.zoom)-2+this.decalX,(this.sprites[i].y*this.zoom)-2+this.decalY,(this.sprites[i].w*this.zoom)+4,(this.sprites[i].h*this.zoom)+4);
+					else if(curSprite instanceof Rectangle)
+						this.contexts[2].strokeRect((curSprite.x*this.zoom)-2+this.decalX,(curSprite.y*this.zoom)-2+this.decalY,(curSprite.w*this.zoom)+4,(curSprite.h*this.zoom)+4);
 					}
 				}
 			this.timer=this.main.delay(1000/this.fps, this);
@@ -218,7 +219,9 @@ var Game=new Class({
 				{'i':0,'x':3,'y':36,'label':'Road 1'},
 				{'i':0,'x':1,'y':36,'label':'Road 2'},
 				{'i':0,'x':4,'y':36,'label':'Road 3'},
-				{'i':3,'x':0,'y':6,'label':'Shot'}];
+				{'i':3,'x':0,'y':6,'label':'Shot'},
+				{'i':1,'x':1,'y':11,'label':'Hangar GV 2'},
+				{'i':1,'x':2,'y':11,'label':'Hangar GV 3'}];
 		this.images[n].src = uri;
 		this.loadingTiles++;
 		this.images[n].onload = this.tileImageLoaded.bind(this);

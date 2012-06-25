@@ -19,30 +19,37 @@ var Shot=new Class({
 		this.accel=1;
 		this.maxSpeed=3;
 		this.speed=1;
+		this.range=80;
 		},
 	move : function() {
-		this.prevX=this.x;
-		this.prevY=this.y;
-		this.speed=this.speed+this.accel;
-		if(this.speed>this.maxSpeed)
-			this.speed=this.maxSpeed;
-		else if(this.speed<-(this.maxSpeed/2))
-			this.speed=-(this.maxSpeed/2);
-		this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
-		this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
-		this.declarePositions();
+		if(this.range>0)
+			{
+			this.prevX=this.x;
+			this.prevY=this.y;
+			this.speed=this.speed+this.accel;
+			if(this.speed>this.maxSpeed)
+				this.speed=this.maxSpeed;
+			else if(this.speed<-(this.maxSpeed/2))
+				this.speed=-(this.maxSpeed/2);
+			this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
+			this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
+			this.range--;
+			this.declarePositions();
+			}
+		else
+			this.remove();
 		},
 	draw : function() {
 		this.game.drawTile(this.t, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z);
 		},
 	rewind : function() {
-		//this.remove();
+		this.remove();
 		},
 	hit : function(sprite) {
 		var hit=(sprite!=this.tank?this.parent(sprite):false);
-		if(hit)
+		if(hit&&sprite.damage)
 			{
-			// Do damages
+			sprite.damage(20);
 			}
 		return hit;
 		},
