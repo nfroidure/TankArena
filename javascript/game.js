@@ -328,11 +328,14 @@ var Game=new Class({
 			case 'right':
 				this.controlableSprites[this.controlledSprite].setDirection(0);
 				break;
-			case 'tab':
-				this.controlledSprite=(this.controlledSprite+1)%this.controlableSprites.length;
-				break;
 			case 'space':
 				this.controlableSprites[this.controlledSprite].fire();
+				break;
+			case 'tab':
+				this.controlledSprite=(this.controlledSprite+1)%this.controlableSprites.length;
+				this.controlableSprites[this.controlledSprite].setDirection(0);
+				this.controlableSprites[this.controlledSprite].setWay(0);
+				break;
 			default:
 				used=false;
 				break;
