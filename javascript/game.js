@@ -267,7 +267,12 @@ var Game=new Class({
 		this.sounds[sound].pause();
 		},
 	mute : function() {
-		this.muted=true;
+		this.muted=!this.muted;
+		for(sound in this.sounds)
+			{
+			if(this.sounds[sound] instanceof Audio&&this.sounds[sound].getAttribute('loop'))
+				this.sounds[sound].muted=this.muted;
+			}
 		},
 	/* Events management */
 	initEvents : function() {
@@ -290,6 +295,10 @@ var Game=new Class({
 		},
 	keyDownHandler : function(e) {
 		var used=true;
+		if(e.code==77)
+			{
+			this.mute();
+			}
 		if(e.control)
 			{
 			if(e.code==107)
