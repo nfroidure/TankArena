@@ -65,7 +65,7 @@ var Game=new Class({
 				{'t':10,'x':9,'y':5},{'t':10,'x':10,'y':5},{'t':10,'x':11,'y':5},{'t':10,'x':12,'y':5},{'t':12,'x':13,'y':5}]};
 		this.grid=new Array(this.map.h*this.map.w);
 		this.fit();
-		//this.playSound('bg');
+		this.playSound('bg');
 		this.sprites=new Array(new Tank(this,33,33,1,0),new Tank(this,165,165,1,0),new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
 		this.controlableSprites=new Array(this.sprites[0],this.sprites[1]);
 		this.controlledSprite=0;
@@ -257,7 +257,8 @@ var Game=new Class({
 		if(!this.muted)
 			{
 			this.sounds[sound].pause();
-			this.sounds[sound].currentTime=0;
+			if(!this.sounds[sound].getAttribute('loop'))
+				this.sounds[sound].currentTime=0;
 			this.sounds[sound].play();
 			//this.sounds[sound].cloneNode().play(); Download the sound each time!!! But could be a way to get multi-channel sound.
 			}
