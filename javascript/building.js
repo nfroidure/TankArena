@@ -16,8 +16,6 @@ var Building=new Class({
 		this.t=t;
 		this.w=this.game.tileSize;
 		this.h=this.game.tileSize;
-		this.solidity=1;
-		this.life=100;
 		this.declarePositions();
 		this.shapes.push(new Rectangle(this.x,this.y,this.z,this.w,this.h));
 		},
@@ -27,17 +25,11 @@ var Building=new Class({
 		this.parent();
 		},
 	damage : function(power) {
-		if(this.life>0)
+		this.parent(power);
+		if(this.life==0)
 			{
-			this.life=this.life-Math.ceil(power/this.solidity);
-			console.log('Building damaged:'+this.life);
-			}
-		if(this.life<1)
-			{
-			this.life=0;
 			this.draw();
 			this.remove();
-			console.log('Building removed:'+this.life);
 			}
 		},
 	destruct : function() {

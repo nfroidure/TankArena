@@ -10,58 +10,41 @@
  */
 
 var Tank=new Class({
-	Extends: Sprite,
-	initialize: function(game, x, y, z, a) {
-		this.parent(game, x, y, z);
-		this.direction=0;
-		this.a=a; // Angle %pi/8 [0-16]
+	Extends: Movable,
+	initialize: function(game, x, y, z, a, specs) {
+		this.parent(game, x, y, z, a);
 		this.turretDirection=0;
 		this.ta=a;
-		this.way=0;
-		this.speed=0;
-		this.maxSpeed=6;
-		this.solidity=2;
-		this.life=100;
-		this.fireZones=[{'r':10,'a':0}];
 		this.curFireZone=0;
-		this.shapes.push(new Circle(this.x,this.y,this.z, 12));
+		// Tank specs
+		if(!specs)
+			specs={};
+		this.t=(specs.t?specs.t:2);
+		this.hasTurret=(specs.turret?true:false);
+		this.maxSpeed=(specs.maxSpeed?specs.maxSpeed:3);
+		this.solidity=(specs.solidity?specs.solidity:2);
+		this.fireZones=(specs.fireZones?specs.fireZones:[{'r':10,'a':0}]);
+		this.shapes.push(new Circle(this.x,this.y,this.z, (specs.r?specs.r:12)));
 		},
 	move : function() {
-		this.prevX=this.x;
-		this.prevY=this.y;
-		if(this.direction!=0)
-			this.a=(16+this.a+this.direction)%16;
-		if(this.turretDirection!=0)
+		this.parent();
+		if(!this.hasTurret)
+			this.ta=this.a;
+		else if(this.turretDirection!=0)
 			this.ta=(16+this.ta+this.turretDirection)%16;
-		if(this.way!=0)
-			{
-			this.speed=this.speed+this.way;
-			if(this.speed>this.maxSpeed)
-				this.speed=this.maxSpeed;
-			else if(this.speed<-(this.maxSpeed/2))
-				this.speed=-(this.maxSpeed/2);
-			}
-		else if(this.speed>0)
-			this.speed--;
-		else if(this.speed<0)
-			this.speed++;
-		this.shapes[0].x=this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
-		this.shapes[0].y=this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
-		this.declarePositions();
-		},
-	rewind : function() {
-		this.x=this.prevX;
-		this.y=this.prevY;
+		this.shapes[0].x=this.x;
+		this.shapes[0].y=this.y;
 		},
 	draw : function() {
 		if(this.life>0)
 			{
-			this.game.drawImage(2, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
-			this.game.drawImage(2, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			if(this.hasTurret)
+				this.game.drawImage(this.t, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			}
 		else
 			{
-			this.game.drawImage(2, 7, 4, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			this.game.drawImage(this.t, 7, 4, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			}
 		this.parent();
 		},
@@ -71,31 +54,21 @@ var Tank=new Class({
 		else if(turret)
 			this.turretDirection=direction;
 		else
-			this.direction=direction;
-		},
-	setWay : function(way) {
-		if(way==0||this.life<1)
-			this.way=0;
-		else
-		this.way=way;
+			this.parent(direction);
 		},
 	damage : function(power) {
-		if(this.life>0)
-			{
-			this.life=this.life-Math.ceil(power/this.solidity);
-			console.log('Tank damaged:'+this.life);
-			}
-		else
-			{
+		if(this.life==0)
 			this.remove();
-			console.log('Tank removed:'+this.life);
-			}
+		this.parent(power);
+		if(this.life==0)
+			this.draw();
 		},
 	fire : function(secondary) {
 		if(this.life>0)
 			{
-			var x=(Math.cos(this.ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
-			var y=(Math.sin(this.ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
+			var ta=(this.fireZones[this.curFireZone].a?this.fireZones[this.curFireZone].a:0)+this.ta;
+			var x=(Math.cos(ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
+			var y=(Math.sin(ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
 			this.curFireZone=(this.curFireZone+1)%this.fireZones.length;
 			if(secondary)
 				{
@@ -108,18 +81,6 @@ var Tank=new Class({
 				this.game.drawImage(3, 4, 2, this.x-this.game.tileSize/2+x, this.y-this.game.tileSize/2+y, this.z, 1, 1);
 				}
 			}
-		},
-	hit : function(sprite) {
-		var hit=(sprite instanceof Shot?false:this.parent(sprite));
-		if(hit&&this.speed)
-			{
-			this.speed=-(this.speed);
-			this.way=-this.way;
-			this.way=0;
-			if(!(sprite instanceof  Shot))
-				this.game.playSound('crash');
-			}
-		return hit;
 		},
 	destruct : function() {
 		}

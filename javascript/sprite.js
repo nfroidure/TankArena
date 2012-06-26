@@ -17,6 +17,8 @@ var Sprite=new Class({
 		this.y=y;
 		this.z=z;
 		this.index=-1;
+		this.solidity=1;
+		this.life=100;
 		this.shapes=new Array();
 		this.declarePositions();
 		},
@@ -43,6 +45,14 @@ var Sprite=new Class({
 				}
 			}
 		return false;
+		},
+	damage : function(power) {
+		if(this.life>0)
+			{
+			this.life=this.life-Math.round(power/this.solidity);
+			if(this.life<0)
+				this.life=0;
+			}
 		},
 	remove : function() {
 		var index=this.game.sprites.indexOf(this);

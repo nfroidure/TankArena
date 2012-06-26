@@ -66,8 +66,17 @@ var Game=new Class({
 		this.grid=new Array(this.map.h*this.map.w);
 		this.fit();
 		this.playSound('bg');
-		this.sprites=new Array(new Tank(this,33,33,1,0),new Tank(this,165,165,1,0),new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
-		this.controlableSprites=new Array(this.sprites[0],this.sprites[1]);
+		this.sprites=new Array(new Tank(this,33,33,1,0,{'t':13,'maxSpeed':3,'turret':true}),
+			new Tank(this,165,165,1,0,{'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}]}),
+			new Tank(this,99,66,1,0,{'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}]}),
+			new Tank(this,165,132,1,0,{'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}]}),
+			new Tank(this,165,66,1,0,{'t':17,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':0}],'solidity':4}),
+			new Tank(this,330,66,1,0,{'t':18,'maxSpeed':7,'turret':false,'fireZones':[{'r':5,'a':0}],'solidity':1}),
+			new Tank(this,330,330,1,0,{'t':19,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':-Math.PI/3},{'r':10,'a':0},{'r':10,'a':Math.PI/3}],'solidity':1}),
+			new Tank(this,330,298,1,0,{'t':20,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1}),
+			new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
+		this.controlableSprites=new Array(this.sprites[0],this.sprites[1],this.sprites[2],this.sprites[3],this.sprites[4],this.sprites[5],
+			this.sprites[6],this.sprites[7]);
 		this.controlledSprite=0;
 		this.resume();
 		},
@@ -193,8 +202,30 @@ var Game=new Class({
 		this.loadingTilesCallback=callback;
 		this.registerTileImage(this.rootPath+'sprites/floors.png');
 		this.registerTileImage(this.rootPath+'sprites/buildings.png');
-		this.registerTileImage(this.rootPath+'sprites/tank1.png');
+		this.registerTileImage(this.rootPath+'sprites/icons.png');
 		this.registerTileImage(this.rootPath+'sprites/animations.png');
+		this.registerTileImage(this.rootPath+'sprites/boat1.png');
+		this.registerTileImage(this.rootPath+'sprites/boat2.png');
+		this.registerTileImage(this.rootPath+'sprites/car1.png');
+		this.registerTileImage(this.rootPath+'sprites/car2.png');
+		this.registerTileImage(this.rootPath+'sprites/copter1.png');
+		this.registerTileImage(this.rootPath+'sprites/copter2.png');
+		this.registerTileImage(this.rootPath+'sprites/plane1.png');
+		this.registerTileImage(this.rootPath+'sprites/plane2.png');
+		this.registerTileImage(this.rootPath+'sprites/plane3.png');
+		this.registerTileImage(this.rootPath+'sprites/tank1.png');
+		this.registerTileImage(this.rootPath+'sprites/tank2.png');
+		this.registerTileImage(this.rootPath+'sprites/tank3.png');
+		this.registerTileImage(this.rootPath+'sprites/tank4.png');
+		this.registerTileImage(this.rootPath+'sprites/tank5.png');
+		this.registerTileImage(this.rootPath+'sprites/tank6.png');
+		this.registerTileImage(this.rootPath+'sprites/tank7.png');
+		this.registerTileImage(this.rootPath+'sprites/tank8.png');
+		this.registerTileImage(this.rootPath+'sprites/tank9.png');
+		this.registerTileImage(this.rootPath+'sprites/tank10.png');
+		this.registerTileImage(this.rootPath+'sprites/tank11.png');
+		this.registerTileImage(this.rootPath+'sprites/tank12.png');
+		this.registerTileImage(this.rootPath+'sprites/man.png');
 		},
 	registerTileImage : function(uri) {
 		var n=this.images.length;
