@@ -15,7 +15,6 @@ var Tank=new Class({
 		this.parent(game, x, y, z);
 		this.direction=0;
 		this.a=a; // Angle %pi/8 [0-16]
-		this.z=(z?z:1);
 		this.turretDirection=0;
 		this.ta=a;
 		this.way=0;
@@ -23,6 +22,8 @@ var Tank=new Class({
 		this.maxSpeed=6;
 		this.solidity=2;
 		this.life=100;
+		this.fireZones=[{'r':10,'a':0}];
+		this.curFireZone=0;
 		this.shapes.push(new Circle(this.x,this.y,this.z, 12));
 		},
 	move : function() {
@@ -93,14 +94,18 @@ var Tank=new Class({
 	fire : function(secondary) {
 		if(this.life>0)
 			{
+			var x=(Math.cos(this.ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
+			var y=(Math.sin(this.ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
+			this.curFireZone=(this.curFireZone+1)%this.fireZones.length;
 			if(secondary)
 				{
 				this.game.playSound('empty');
 				}
 			else
 				{
-				this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
+				this.game.sprites.push(new Shot(this.game,this,this.x+x,this.y+y,this.z,this.ta));
 				this.game.playSound('main');
+				this.game.drawImage(3, 4, 2, this.x-this.game.tileSize/2+x, this.y-this.game.tileSize/2+y, this.z, 1, 1);
 				}
 			}
 		},
