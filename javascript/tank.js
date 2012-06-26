@@ -90,11 +90,18 @@ var Tank=new Class({
 			console.log('Tank removed:'+this.life);
 			}
 		},
-	fire : function() {
+	fire : function(secondary) {
 		if(this.life>0)
 			{
-			this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
-			this.game.playSound('main');
+			if(secondary)
+				{
+				this.game.playSound('empty');
+				}
+			else
+				{
+				this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
+				this.game.playSound('main');
+				}
 			}
 		},
 	hit : function(sprite) {

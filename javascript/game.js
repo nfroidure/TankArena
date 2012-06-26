@@ -244,6 +244,7 @@ var Game=new Class({
 		this.registerSound('bg',this.rootPath+'sounds/tune.ogg',true);
 		this.registerSound('crash',this.rootPath+'sounds/crash.wav');
 		this.registerSound('main',this.rootPath+'sounds/main.wav');
+		this.registerSound('empty',this.rootPath+'sounds/empty.wav');
 		this.registerSound('explode',this.rootPath+'sounds/expl.wav');
 		},
 	registerSound : function(sound, uri, loop) {
@@ -347,7 +348,7 @@ var Game=new Class({
 				this.controlableSprites[this.controlledSprite].setDirection(0);
 				break;
 			case 'space':
-				this.controlableSprites[this.controlledSprite].fire();
+				this.controlableSprites[this.controlledSprite].fire(e.control);
 				break;
 			case 'tab':
 				this.controlledSprite=(this.controlledSprite+1)%this.controlableSprites.length;
