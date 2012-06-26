@@ -242,6 +242,9 @@ var Game=new Class({
 		this.muted=false;
 		this.sounds=new Array();
 		this.registerSound('bg',this.rootPath+'sounds/tune.ogg',true);
+		this.registerSound('crash',this.rootPath+'sounds/crash.wav');
+		this.registerSound('main',this.rootPath+'sounds/main.wav');
+		this.registerSound('explode',this.rootPath+'sounds/expl.wav');
 		},
 	registerSound : function(sound, uri, loop) {
 		this.sounds[sound] = new Audio(uri);

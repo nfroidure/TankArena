@@ -52,6 +52,7 @@ var Shot=new Class({
 		if(hit&&sprite.damage)
 			{
 			sprite.damage(20);
+			this.game.playSound('explode');
 			}
 		return hit;
 		},

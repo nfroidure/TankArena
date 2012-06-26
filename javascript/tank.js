@@ -92,7 +92,10 @@ var Tank=new Class({
 		},
 	fire : function() {
 		if(this.life>0)
+			{
 			this.game.sprites.push(new Shot(this.game,this,this.x,this.y,this.z,this.ta));
+			this.game.playSound('main');
+			}
 		},
 	hit : function(sprite) {
 		var hit=(sprite instanceof Shot?false:this.parent(sprite));
@@ -101,6 +104,8 @@ var Tank=new Class({
 			this.speed=-(this.speed);
 			this.way=-this.way;
 			this.way=0;
+			if(!(sprite instanceof  Shot))
+				this.game.playSound('crash');
 			}
 		return hit;
 		},
