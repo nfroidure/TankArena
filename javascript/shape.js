@@ -91,6 +91,10 @@ var Shape=new Class({
 						&&rect.y>circ.y-circ.r
 						&&rect.y+rect.h<circ.y+circ.r);
 		},
+	hit : function(shape) {
+		if(Math.abs(this.z-shape.z)<2)
+			return true;
+		},
 	destruct : function() {
 		}
 });

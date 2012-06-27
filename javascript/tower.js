@@ -9,7 +9,7 @@
  *
  */
 
-var Tank=new Class({
+var Tower=new Class({
 	Extends: Movable,
 	initialize: function(game, x, y, z, a, specs) {
 		this.parent(game, x, y, z, a);
@@ -22,24 +22,13 @@ var Tank=new Class({
 			specs={};
 		this.t=(specs.t?specs.t:2);
 		this.hasTurret=(specs.turret?true:false);
-		this.hasWings=(specs.fly?true:false);
-		this.inerty=(specs.fly?0.1:1);
-		this.acceleration=(specs.fly?0.5:1);
-		this.maxSpeed=(specs.maxSpeed||specs.maxSpeed===0?specs.maxSpeed:3);
+		this.maxSpeed=(specs.maxSpeed?specs.maxSpeed:3);
 		this.solidity=(specs.solidity?specs.solidity:2);
 		this.fireZones=(specs.fireZones?specs.fireZones:[{'r':10,'a':0}]);
 		this.shapes.push(new Circle(this.x,this.y,this.z, (specs.r?specs.r:12)));
 		},
 	move : function() {
 		this.parent();
-		if(this.hasWings)
-			{
-			if(this.speed<=0)
-				this.z=1;
-			else
-				this.z=this.speed/this.maxSpeed*this.game.numCanvas-1;
-			this.shapes[0].z=this.z=(this.z<1?1:(this.z>this.game.numCanvas-1?this.game.numCanvas-1:this.z));
-			}
 		if(!this.hasTurret)
 			this.ta=this.a;
 		else if(this.turretDirection!=0)
@@ -52,7 +41,7 @@ var Tank=new Class({
 		if(this.life>0)
 			{
 			//this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
-			this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+((!this.speed)||this.animStep>2?0:2), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+((!this.speed)||this.animStep>2?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			if(this.hasTurret)
 				this.game.drawImage(this.t, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			}
@@ -76,6 +65,8 @@ var Tank=new Class({
 		else
 			{
 			this.parent(power);
+			if(this.life==0)
+				this.draw();
 			}
 		},
 	fire : function(secondary) {

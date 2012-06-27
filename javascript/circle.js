@@ -16,6 +16,8 @@ var Circle=new Class({
 		this.r=r;
 		},
 	hit : function(shape) {
+		if(!this.parent(shape))
+			return false;
 		if(shape instanceof Rectangle)
 			{
 			return this.circleHitRectangle(this,shape);

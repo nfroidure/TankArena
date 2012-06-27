@@ -19,7 +19,7 @@ var Game=new Class({
 		if(noticeFunction)
 			this.notice=noticeFunction;
 		// Creating canvas
-		this.numCanvas=3;
+		this.numCanvas=5;
 		while(element.childNodes[0])
 			element.removeChild(element.childNodes[0]);
 		this.canvas=new Array();
@@ -73,9 +73,14 @@ var Game=new Class({
 			new Tank(this,99,66,1,0,{'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'r':8}),
 			new Tank(this,165,132,1,0,{'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'r':12}),
 			new Tank(this,165,66,1,0,{'t':17,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':0}],'solidity':4}),
-			new Tank(this,330,66,1,0,{'t':18,'maxSpeed':7,'turret':false,'fireZones':[{'r':5,'a':0}],'solidity':1,'r':4}),
+			new Tank(this,330,66,1,0,{'t':18,'maxSpeed':7,'turret':false,'fireZones':[{'r':5,'a':0}],'solidity':1,'r':3}),
 			new Tank(this,330,330,1,0,{'t':19,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':-Math.PI/3},{'r':10,'a':0},{'r':10,'a':Math.PI/3}],'solidity':3,'r':9}),
-			new Tank(this,330,298,1,0,{'t':20,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':6}),
+			new Tank(this,330,181,1,0,{'t':20,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':3}),
+			new Tank(this,363,181,1,0,{'t':10,'maxSpeed':11,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true}),
+			new Tank(this,396,181,1,0,{'t':11,'maxSpeed':13,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true}),
+			new Tank(this,429,181,1,0,{'t':12,'maxSpeed':16,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true}),
+			new Tank(this,285,220,1,0,{'t':25,'maxSpeed':0,'turret':false,'fireZones':[{'r':14,'a':0}],'solidity':6}),
+			//Man new Tank(this,363,330,1,0,{'t':26,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':6}),
 			new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
 		this.resume();
 		},
@@ -137,8 +142,8 @@ var Game=new Class({
 			//console.log('View:'+this.controlableSprites[this.controlledSprite].x+'-('+this.width+'/2)'+'='+x+','+this.controlableSprites[this.controlledSprite].y+'-('+this.height+'/2)'+'='+y);
 			this.canvas[0].setStyle('left',this.decalX+'px');
 			this.canvas[0].setStyle('top',this.decalY+'px');
-			this.clearTiles(1);
-			this.clearTiles(2);
+			for(var i=this.numCanvas-1; i>0; i--)
+				this.clearTiles(i);
 			for(var i=this.sprites.length-1; i>=0; i--)
 				{
 				var curSprite=this.sprites[i];
@@ -224,6 +229,7 @@ var Game=new Class({
 		this.registerTileImage(this.rootPath+'sprites/tank10.png');
 		this.registerTileImage(this.rootPath+'sprites/tank11.png');
 		this.registerTileImage(this.rootPath+'sprites/tank12.png');
+		this.registerTileImage(this.rootPath+'sprites/towers.png');
 		this.registerTileImage(this.rootPath+'sprites/man.png');
 		},
 	registerTileImage : function(uri) {
@@ -261,8 +267,10 @@ var Game=new Class({
 		this.drawImage(this.tiles[n].i, this.tiles[n].x, this.tiles[n].y, x, y, z, this.tiles[n].w, this.tiles[n].h);
 		},
 	drawImage : function(i, srcX, srcY, x, y, z, w, h) {
+		z=Math.round(z);
+		var zf=((!z)||z==1?1:z/3);
 		this.contexts[(z?z:0)].drawImage(this.images[i], this.tileSize*srcX, this.tileSize*srcY,
-			this.tileSize*(w?w:1), this.tileSize*(h?h:1), (this.zoom*x)+(z>0?this.decalX:0), (this.zoom*y)+(z>0?this.decalY:0), this.zoom*this.tileSize*(w?w:1), this.zoom*this.tileSize*(h?h:1));
+			this.tileSize*(w?w:1), this.tileSize*(h?h:1), (this.zoom*x)-(this.zoom*((zf-1)*this.tileSize)/2)+(z>0?this.decalX:0), (this.zoom*y)-(this.zoom*((zf-1)*this.tileSize)/2)+(z>0?this.decalY:0), zf*this.zoom*this.tileSize*(w?w:1), zf*this.zoom*this.tileSize*(h?h:1));
 		},
 	clearTiles : function(z) {
 		this.contexts[(z?z:0)].clearRect(0,0,this.canvas[(z?z:0)].width,this.canvas[(z?z:0)].height);

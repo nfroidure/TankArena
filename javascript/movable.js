@@ -18,24 +18,28 @@ var Movable=new Class({
 		this.way=0;
 		this.speed=0;
 		this.maxSpeed=0;
+		this.acceleration=1;
+		this.inerty=1;
 		},
 	move : function() {
 		this.prevX=this.x;
 		this.prevY=this.y;
 		if(this.direction!=0)
 			this.a=(16+this.a+this.direction)%16;
-		if(this.way!=0)
+		if(this.maxSpeed&&this.way!=0)
 			{
-			this.speed=this.speed+this.way;
+			this.speed=this.speed+(this.way*this.acceleration);
 			if(this.speed>this.maxSpeed)
 				this.speed=this.maxSpeed;
 			else if(this.speed<-(this.maxSpeed/2))
 				this.speed=-(this.maxSpeed/2);
 			}
 		else if(this.speed>0)
-			this.speed--;
+			this.speed=this.speed-this.inerty;
 		else if(this.speed<0)
-			this.speed++;
+			this.speed=this.speed+this.inerty;
+		if(Math.abs(this.speed)<this.inerty)
+			this.speed=0;
 		this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
 		this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
 		this.declarePositions();
