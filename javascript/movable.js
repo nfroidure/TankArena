@@ -10,7 +10,7 @@
  */
 
 var Movable=new Class({
-	Extends: Sprite,
+	Extends: Controlable,
 	initialize: function(game, x, y, z, a) {
 		this.parent(game, x, y, z);
 		this.direction=0;

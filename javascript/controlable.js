@@ -10,84 +10,26 @@
  *
  */
 
-var Bar=new Class({
-	initialize: function(game) {
-		this.game = game;
-		this.sizeFactor=3;
-		this.fit();
-		this.x = (this.game.width/2)-(this.width/2);
-		this.fireMode='';
-		this.maxShots=1;
-		this.speed=1;
-		this.lives=3;
-		this.speedLimit=5;
-		this.direction=0;
-		this.glueMode=false;
-		this.shots=new Array();
-		},
-	setMode : function(mode) {
-		switch(mode)
-			{
-			case 'xs':
-				this.sizeFactor=1;
-				break;
-			case 's':
-				this.sizeFactor=2;
-				break;
-			case 'm':
-				this.sizeFactor=3;
-				break;
-			case 'l':
-				this.sizeFactor=4;
-				break;
-			case 'xl':
-				this.sizeFactor=5;
-				break;
-			}
-		this.width = this.sizeFactor*10*this.game.aspectRatio;
-		},
-	fit : function() {
-		this.width = this.sizeFactor*10*this.game.aspectRatio;
-		this.height = 5*this.game.aspectRatio;
-		this.yMargin = 5*this.game.aspectRatio;
-		this.y = this.game.height-this.height-this.yMargin;
-		},
-	draw : function() {
-		this.game.context.fillStyle = "#333";
-		this.game.context.fillRect(this.x, this.y, this.width, this.height);
+var Controlable=new Class({
+	Extends: Sprite,
+	initialize: function(game, x, y, z) {
+		this.parent(game, x, y, z);
+		this.game.controlableSprites.push(this);
+		this.owner=0; // LocalHuman / NetworkHuman / Computer
 		},
 	remove : function() {
-		this.game.context.clearRect(0, this.y, this.game.width, this.game.height);
-		},
-	fire : function() {
-		if(this.fireMode&&this.shots.length<=this.maxShots)
-			this.shots.push(new window[this.fireMode+'Shot'](this.game, this.x+(this.width/2), this.y));
-		},
-	moveTo : function(x) {
-		if(x!=this.x)
+		this.parent();
+		var index=this.game.controlableSprites.indexOf(this);
+		if(index>=0)
 			{
-			var maxX = this.game.width - this.width;
-			if(x<=0)
-				this.x=0;
-			else if(x < maxX)
-				this.x = x;
-			else
-				this.x = maxX;
+			this.game.controlableSprites.splice(index,1);
+			if(index<this.game.controlledSprite)
+				this.game.controlledSprite--;
+			else if(index==this.game.controlledSprite)
+				{
+				this.game.controlledSprite=this.game.controlledSprite%this.game.controlableSprites.length;
+				}
 			}
-		},
-	move : function(e) {
-		this.remove();
-		if(this.direction!=0)
-			{
-			this.moveTo(this.x+(this.direction*this.speed*this.game.aspectRatio/5));
-			if(this.speed<this.speedLimit)
-				this.speed++;
-			}
-		},
-	setDirection : function(direction) {
-		if(direction!=this.direction)
-			this.speed=0;
-		this.direction=direction;
 		},
 	destruct : function() {
 		}

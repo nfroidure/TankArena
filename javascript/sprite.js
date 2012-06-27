@@ -59,12 +59,6 @@ var Sprite=new Class({
 		if(index>=0)
 			this.game.sprites.splice(index,1);
 		index=this.game.controlableSprites.indexOf(this);
-		if(index>=0)
-			this.game.controlableSprites.splice(index,1);
-		if(index==this.game.controlledSprite)
-			{
-			this.game.controlledSprite=this.game.controlledSprite%this.game.controlableSprites.length;
-			}
 		if(this.index!=-1)
 			this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);
 		},

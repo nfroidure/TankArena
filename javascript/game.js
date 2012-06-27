@@ -66,6 +66,8 @@ var Game=new Class({
 		this.grid=new Array(this.map.h*this.map.w);
 		this.fit();
 		this.playSound('bg');
+		this.controlableSprites=new Array();
+		this.controlledSprite=0;
 		this.sprites=new Array(new Tank(this,33,33,1,0,{'t':13,'maxSpeed':3,'turret':true}),
 			new Tank(this,165,165,1,0,{'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'r':9}),
 			new Tank(this,99,66,1,0,{'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'r':8}),
@@ -75,9 +77,6 @@ var Game=new Class({
 			new Tank(this,330,330,1,0,{'t':19,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':-Math.PI/3},{'r':10,'a':0},{'r':10,'a':Math.PI/3}],'solidity':3,'r':9}),
 			new Tank(this,330,298,1,0,{'t':20,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':6}),
 			new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
-		this.controlableSprites=new Array(this.sprites[0],this.sprites[1],this.sprites[2],this.sprites[3],this.sprites[4],this.sprites[5],
-			this.sprites[6],this.sprites[7]);
-		this.controlledSprite=0;
 		this.resume();
 		},
 	pause : function() {

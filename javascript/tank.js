@@ -16,6 +16,7 @@ var Tank=new Class({
 		this.turretDirection=0;
 		this.ta=a;
 		this.curFireZone=0;
+		this.animStep=0;
 		// Tank specs
 		if(!specs)
 			specs={};
@@ -34,11 +35,13 @@ var Tank=new Class({
 			this.ta=(16+this.ta+this.turretDirection)%16;
 		this.shapes[0].x=this.x;
 		this.shapes[0].y=this.y;
+		this.animStep=(this.animStep+1)%5;
 		},
 	draw : function() {
 		if(this.life>0)
 			{
-			this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			//this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+((!this.speed)||this.animStep>2?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			if(this.hasTurret)
 				this.game.drawImage(this.t, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			}
@@ -59,9 +62,12 @@ var Tank=new Class({
 	damage : function(power) {
 		if(this.life==0)
 			this.remove();
-		this.parent(power);
-		if(this.life==0)
-			this.draw();
+		else
+			{
+			this.parent(power);
+			if(this.life==0)
+				this.draw();
+			}
 		},
 	fire : function(secondary) {
 		if(this.life>0)
