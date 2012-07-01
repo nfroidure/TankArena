@@ -42,11 +42,15 @@ var Movable=new Class({
 			this.speed=0;
 		this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
 		this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
+		if(this.x>this.game.map.w*this.game.tileSize)
+			this.x-=this.game.map.w*this.game.tileSize;
+		if(this.y>this.game.map.h*this.game.tileSize)
+			this.y-=this.game.map.h*this.game.tileSize;
+		if(this.x<0)
+			this.x+=this.game.map.w*this.game.tileSize;
+		if(this.y<0)
+			this.y+=this.game.map.h*this.game.tileSize;
 		this.declarePositions();
-		},
-	rewind : function() {
-		this.x=this.prevX;
-		this.y=this.prevY;
 		},
 	setDirection : function(direction) {
 		if(direction==0||this.life<1)
@@ -60,17 +64,21 @@ var Movable=new Class({
 		else
 			this.way=way;
 		},
-	hit : function(sprite) {
-		var hit=(sprite instanceof Shot?false:this.parent(sprite));
+	hits : function() {
+		var hit=this.parent();
 		if(hit&&this.speed)
 			{
 			this.speed=-(this.speed);
-			this.way=-this.way;
 			this.way=0;
-			if(!(sprite instanceof  Shot))
-				this.game.playSound('crash');
+			this.x=this.prevX;
+			this.y=this.prevY;
+			this.declarePositions();
+			this.game.playSound('crash');
 			}
 		return hit;
+		},
+	hit : function(sprite) {
+		return (sprite instanceof Shot?false:this.parent(sprite));
 		},
 	destruct : function() {
 		}

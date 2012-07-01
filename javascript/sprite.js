@@ -19,6 +19,7 @@ var Sprite=new Class({
 		this.index=-1;
 		this.solidity=1;
 		this.life=100;
+		this.hitField=3;
 		this.shapes=new Array();
 		this.declarePositions();
 		},
@@ -34,6 +35,16 @@ var Sprite=new Class({
 			this.game.grid[newIndex].push(this);
 			this.index=newIndex;
 			}
+		},
+	hits : function() {
+		var pos=this.index.split('-');
+		var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),this.hitField);
+		for(var i=nearSprites.length-1; i>=0; i--)
+			{
+			if(this.hit(nearSprites[i]))
+				return true;
+			}
+		return false;
 		},
 	hit : function(sprite) {
 		for(var i=this.shapes.length-1; i>=0; i--)
@@ -63,6 +74,8 @@ var Sprite=new Class({
 			this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);
 		},
 	draw : function() {
+		this.game.contexts[this.game.numCanvas-1].fillStyle='#FFFFFF';
+		this.game.contexts[this.game.numCanvas-1].strokeStyle='#FFFFFF';
 		for(var i=this.shapes.length-1; i>=0; i--)
 			{
 			this.game.contexts[this.game.numCanvas-1].fillRect((this.shapes[i].x*this.game.zoom)-2+this.game.decalX,(this.shapes[i].y*this.game.zoom)-2+this.game.decalY,4,4);

@@ -94,6 +94,10 @@ var Tank=new Class({
 				this.game.sprites.push(new Shot(this.game,this,this.x+x,this.y+y,this.z,this.ta));
 				this.game.playSound('main');
 				this.game.drawImage(3, 4, 2, this.x-this.game.tileSize/2+x, this.y-this.game.tileSize/2+y, this.z, 1, 1);
+				if(this.a==this.ta)
+					this.speed=-this.maxSpeed;
+				else if(this.a==this.ta%Math.PI)
+					this.speed=this.maxSpeed;
 				}
 			}
 		},

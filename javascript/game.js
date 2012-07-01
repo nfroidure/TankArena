@@ -45,8 +45,6 @@ var Game=new Class({
 				this.contexts[i]=this.canvas[i].getContext('2d');
 				}
 			// Setting debug canvas styles
-			this.contexts[this.numCanvas-1].fillStyle='#FFFFFF';
-			this.contexts[this.numCanvas-1].strokeStyle='#FFFFFF';
 			this.initEvents();
 			this.initTiles(this.reset.bind(this));
 			this.initSounds();
@@ -151,51 +149,35 @@ var Game=new Class({
 				if(curSprite&&curSprite.move)
 					{
 					curSprite.move();
-					// Getting grid pos
-					var pos=curSprite.index.split('-');
-					var hitField=3;
-					// Game limits (could create a "inside" function to test if sprites are in the rectangle the game represents)
-					this.gameRect=new Rectangle(0,0,0,this.map.w*this.tileSize,this.map.h*this.tileSize);
-					for(var j=curSprite.shapes.length-1; j>=0; j--)
-						{
-						if(!this.gameRect.inside(curSprite.shapes[j]))
-							{
-							if(curSprite.rewind)
-								curSprite.rewind();
-							break;
-							}
-						}
-					// Hits
-					for(var k=(pos[0]>hitField?parseInt(pos[0])-hitField:0), l=(pos[0]<this.map.w-hitField?parseInt(pos[0])+hitField:this.map.w); k<l; k++)
-						{
-						for(var m=(pos[1]>hitField?parseInt(pos[1])-hitField:0), n=(pos[1]<this.map.h-hitField?parseInt(pos[1])+hitField:this.map.h); m<n; m++)
-							{
-							if(this.grid[k+'-'+m]&&this.grid[k+'-'+m].length)
-								{
-								for(var j=this.grid[k+'-'+m].length-1; j>=0; j--)
-									{
-									if(curSprite!=this.grid[k+'-'+m][j]&&curSprite.hit)
-										{
-										if(curSprite.hit(this.grid[k+'-'+m][j]))
-											{
-											if(curSprite.rewind)
-												curSprite.rewind();
-											}
-										}
-									}
-								}
-							}
-						}
+					curSprite.hits();
 					}
-				if(!curSprite)
-					console.log('Sprites #'+i+' removed');
-				else
-					{
+				// Drawing sprites
+				if(curSprite)
 					curSprite.draw();
-					}
 				}
 			this.timer=this.main.delay(1000/this.fps, this);
 			}
+		},
+	/* Sprites management */
+	getNearSprites : function(sprite,grixX,gridY,hitField) {
+		var nearSprites=new Array();
+		for(var k=(grixX>hitField?grixX-hitField:0),	l=(grixX<this.map.w-hitField?grixX+hitField:this.map.w); k<l; k++)
+			{
+			for(var m=(gridY>hitField?gridY-hitField:0), n=(gridY<this.map.h-hitField?gridY+hitField:this.map.h); m<n; m++)
+				{
+				if(this.grid[k+'-'+m]&&this.grid[k+'-'+m].length)
+					{
+					for(var j=this.grid[k+'-'+m].length-1; j>=0; j--)
+						{
+						if(sprite!=this.grid[k+'-'+m][j])
+							{
+							nearSprites.push(this.grid[k+'-'+m][j]);
+							}
+						}
+					}
+				}
+			}
+		return nearSprites;
 		},
 	/* Tiles management */
 	initTiles : function(callback) {
@@ -268,7 +250,7 @@ var Game=new Class({
 		},
 	drawImage : function(i, srcX, srcY, x, y, z, w, h) {
 		z=Math.round(z);
-		var zf=((!z)||z==1?1:z/3);
+		var zf=((!z)||z==1?1:z/2);
 		this.contexts[(z?z:0)].drawImage(this.images[i], this.tileSize*srcX, this.tileSize*srcY,
 			this.tileSize*(w?w:1), this.tileSize*(h?h:1), (this.zoom*x)-(this.zoom*((zf-1)*this.tileSize)/2)+(z>0?this.decalX:0), (this.zoom*y)-(this.zoom*((zf-1)*this.tileSize)/2)+(z>0?this.decalY:0), zf*this.zoom*this.tileSize*(w?w:1), zf*this.zoom*this.tileSize*(h?h:1));
 		},

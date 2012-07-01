@@ -74,12 +74,6 @@ var Shape=new Class({
 						&&circ1.y+circ1.r<circ2.y+circ2.r);
 		},
 	circleInsideRectangle : function(circ,rect) {
-		/*console.log('circIR'
-			+circ.x+'-'+circ.r+'>'+rect.x
-			+'&&'+circ.x+'+'+circ.r+'<'+rect.x+'+'+rect.w
-			+'&&'+circ.y+'-'+circ.r+'>'+rect.y
-			+'&&'+circ.y+'+'+circ.r+'<'+rect.y+'+'+rect.h
-			);*/
 		return (circ.x-circ.r>rect.x
 						&&circ.x+circ.r<rect.x+rect.w
 						&&circ.y-circ.r>rect.y
