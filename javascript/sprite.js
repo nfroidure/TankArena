@@ -10,24 +10,57 @@
  */
 
 var Sprite=new Class({
-	initialize: function(game, x, y, z) {
+	initialize: function(game, x, y, z, shapes) {
 		this.game = game;
 		this.tiles=new Array();
 		this.x=x;
 		this.y=y;
 		this.z=z;
+		this.a=0;
 		this.index=-1;
 		this.solidity=1;
 		this.life=100;
 		this.hitField=3;
 		this.shapes=new Array();
+		if(shapes&&shapes.length)
+			{
+			for(var i=shapes.length-1; i>=0; i--)
+				{
+				switch(shapes[i].type)
+					{
+					case 'Circle':
+						this.shapes.push(new Circle(this.x,this.y,this.z, (shapes[i].r?shapes[i].r:12),
+							(shapes[i].dx?shapes[i].dx:0), (shapes[i].dy?shapes[i].dy:0),
+							(shapes[i].dz?shapes[i].dz:0)));
+						break;
+					case 'Rectangle':
+						this.shapes.push(new Rectangle(this.x,this.y,this.z, (shapes[i].w?shapes[i].w:20),
+							(shapes[i].h?shapes[i].h:20), (shapes[i].dx?shapes[i].dx:0),
+							(shapes[i].dy?shapes[i].dy:0), (shapes[i].dz?shapes[i].dz:0)));
+						break;
+					case 'Point':
+						this.shapes.push(new Point(this.x,this.y,this.z,
+							(shapes[i].dx?shapes[i].dx:0), (shapes[i].dy?shapes[i].dy:0),
+							(shapes[i].dz?shapes[i].dz:0)));
+						break;
+					}
+				}
+			}
+		else
+			this.shapes.push(new Rectangle(this.x,this.y,this.z,this.game.tileSize,this.game.tileSize));
 		this.declarePositions();
 		},
 	declarePositions : function() {
+		for(var i=this.shapes.length-1; i>=0; i--)
+			{
+			this.shapes[i].x=this.x+(this.shapes[i].dx?Math.cos(this.a*Math.PI/8)*this.shapes[i].dx:0)-(this.shapes[i].dy?Math.sin(this.a*Math.PI/8)*this.shapes[i].dy:0);
+			this.shapes[i].y=this.y+(this.shapes[i].dy?Math.cos(this.a*Math.PI/8)*this.shapes[i].dy:0)+(this.shapes[i].dx?Math.sin(this.a*Math.PI/8)*this.shapes[i].dx:0);
+			this.shapes[i].z=this.z+this.shapes[i].dz;
+			}
 		var newIndex=Math.floor(this.x/33)+'-'+Math.floor(this.y/33);
 		if(newIndex!=this.index)
 			{
-			console.log('"'+this.index+' -> '+newIndex+'":'+this.x+','+this.y+','+this.z+','+this.speed);
+			//console.log('"'+this.index+' -> '+newIndex+'":'+this.x+','+this.y+','+this.z+','+this.speed);
 			if(this.index!=-1)
 				this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);
 			if(!this.game.grid[newIndex])
@@ -42,7 +75,7 @@ var Sprite=new Class({
 		for(var i=nearSprites.length-1; i>=0; i--)
 			{
 			if(this.hit(nearSprites[i]))
-				return true;
+				return nearSprites[i];
 			}
 		return false;
 		},

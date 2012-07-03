@@ -11,10 +11,12 @@
 
 var Point=new Class({
 	Extends: Shape,
-	initialize: function(x, y, z) {
-		this.parent(x, y, z);
+	initialize: function(x, y, z, dx, dy, dz) {
+		this.parent(x, y, z, dx, dy, dz);
 		},
 	hit : function(shape) {
+		if(!this.parent(shape))
+			return false;
 		if(shape instanceof Point)
 			{
 			return this.pointHitPoint(this,shape);

@@ -11,12 +11,14 @@
 
 var Rectangle=new Class({
 	Extends: Shape,
-	initialize: function( x, y, z, w, h) {
-		this.parent(x, y, z);
+	initialize: function( x, y, z, w, h, dx, dy, dz) {
+		this.parent(x, y, z, dx, dy, dz);
 		this.w=w;
 		this.h=h;
 		},
 	hit : function(shape) {
+		if(!this.parent(shape))
+			return false;
 		if(shape instanceof Rectangle)
 			{
 			return this.rectangleHitRectangle(shape,this);

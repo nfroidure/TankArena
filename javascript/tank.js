@@ -12,7 +12,7 @@
 var Tank=new Class({
 	Extends: Movable,
 	initialize: function(game, x, y, z, a, specs) {
-		this.parent(game, x, y, z, a);
+		this.parent(game, x, y, z, (specs.shapes&&specs.shapes.length?specs.shapes:[{'type':'Circle','r':(specs.r?specs.r:12)}]), a);
 		this.turretDirection=0;
 		this.ta=a;
 		this.curFireZone=0;
@@ -28,10 +28,9 @@ var Tank=new Class({
 		this.maxSpeed=(specs.maxSpeed||specs.maxSpeed===0?specs.maxSpeed:3);
 		this.solidity=(specs.solidity?specs.solidity:2);
 		this.fireZones=(specs.fireZones?specs.fireZones:[{'r':10,'a':0}]);
-		this.shapes.push(new Circle(this.x,this.y,this.z, (specs.r?specs.r:12)));
 		},
 	move : function() {
-		this.parent();
+		var moved=this.parent();
 		if(this.hasWings)
 			{
 			if(this.speed<=0)
@@ -44,9 +43,8 @@ var Tank=new Class({
 			this.ta=this.a;
 		else if(this.turretDirection!=0)
 			this.ta=(16+this.ta+this.turretDirection)%16;
-		this.shapes[0].x=this.x;
-		this.shapes[0].y=this.y;
 		this.animStep=(this.animStep+1)%5;
+		return moved;
 		},
 	draw : function() {
 		if(this.life>0)
@@ -94,10 +92,13 @@ var Tank=new Class({
 				this.game.sprites.push(new Shot(this.game,this,this.x+x,this.y+y,this.z,this.ta));
 				this.game.playSound('main');
 				this.game.drawImage(3, 4, 2, this.x-this.game.tileSize/2+x, this.y-this.game.tileSize/2+y, this.z, 1, 1);
-				if(this.a==this.ta)
-					this.speed=-this.maxSpeed;
-				else if(this.a==this.ta%Math.PI)
-					this.speed=this.maxSpeed;
+				if(!this.hasWings)
+					{
+					if(this.a==this.ta)
+						this.speed=-this.maxSpeed;
+					else if(this.a==(this.ta+Math.PI)%(2*Math.PI))
+						this.speed=this.maxSpeed;
+					}
 				}
 			}
 		},

@@ -11,8 +11,8 @@
 
 var Movable=new Class({
 	Extends: Controlable,
-	initialize: function(game, x, y, z, a) {
-		this.parent(game, x, y, z);
+	initialize: function(game, x, y, z, shapes, a) {
+		this.parent(game, x, y, z, shapes);
 		this.direction=0;
 		this.a=a;
 		this.way=0;
@@ -22,10 +22,17 @@ var Movable=new Class({
 		this.inerty=1;
 		},
 	move : function() {
+		var moved=false;
 		this.prevX=this.x;
 		this.prevY=this.y;
+		this.prevA=this.a;
+		// Rotating
 		if(this.direction!=0)
+			{
 			this.a=(16+this.a+this.direction)%16;
+			moved=true;
+			}
+		// Accelerating
 		if(this.maxSpeed&&this.way!=0)
 			{
 			this.speed=this.speed+(this.way*this.acceleration);
@@ -40,17 +47,24 @@ var Movable=new Class({
 			this.speed=this.speed+this.inerty;
 		if(Math.abs(this.speed)<this.inerty)
 			this.speed=0;
-		this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
-		this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
-		if(this.x>this.game.map.w*this.game.tileSize)
-			this.x-=this.game.map.w*this.game.tileSize;
-		if(this.y>this.game.map.h*this.game.tileSize)
-			this.y-=this.game.map.h*this.game.tileSize;
-		if(this.x<0)
-			this.x+=this.game.map.w*this.game.tileSize;
-		if(this.y<0)
-			this.y+=this.game.map.h*this.game.tileSize;
-		this.declarePositions();
+		// Moving
+		if(this.speed)
+			{
+			this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
+			this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
+			if(this.x>this.game.map.w*this.game.tileSize)
+				this.x-=this.game.map.w*this.game.tileSize;
+			if(this.y>this.game.map.h*this.game.tileSize)
+				this.y-=this.game.map.h*this.game.tileSize;
+			if(this.x<0)
+				this.x+=this.game.map.w*this.game.tileSize;
+			if(this.y<0)
+				this.y+=this.game.map.h*this.game.tileSize;
+			moved=true;
+			}
+		if(moved)
+			this.declarePositions();
+		return moved;
 		},
 	setDirection : function(direction) {
 		if(direction==0||this.life<1)
@@ -65,17 +79,19 @@ var Movable=new Class({
 			this.way=way;
 		},
 	hits : function() {
-		var hit=this.parent();
-		if(hit&&this.speed)
+		var spriteHitted=this.parent();
+		if(spriteHitted)
 			{
 			this.speed=-(this.speed);
 			this.way=0;
 			this.x=this.prevX;
 			this.y=this.prevY;
+			this.a=this.prevA;
 			this.declarePositions();
-			this.game.playSound('crash');
+			if(!(spriteHitted instanceof Shot))
+				this.game.playSound('crash');
 			}
-		return hit;
+		return spriteHitted;
 		},
 	hit : function(sprite) {
 		return (sprite instanceof Shot?false:this.parent(sprite));
