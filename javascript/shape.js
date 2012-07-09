@@ -10,13 +10,15 @@
  */
 
 var Shape=new Class({
-	initialize: function(x, y, z, dx, dy, dz) {
+	initialize: function(x, y, z, dx, dy, dz,cx,cy) {
 		this.x=x;
 		this.y=y;
 		this.z=z;
 		this.dx=(dx?dx:0);
 		this.dy=(dy?dy:0);
 		this.dz=(dz?dz:0);
+		this.cx=(cx?cx:0);
+		this.cy=(cy?cy:0);
 		},
 	pointHitPoint : function(point1,point2) {
 		return (point1.x == point2.x && point1.y == point2.y);

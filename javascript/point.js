@@ -11,8 +11,8 @@
 
 var Point=new Class({
 	Extends: Shape,
-	initialize: function(x, y, z, dx, dy, dz) {
-		this.parent(x, y, z, dx, dy, dz);
+	initialize: function(x, y, z, dx, dy, dz, cx, cy) {
+		this.parent(x, y, z, dx, dy, dz, cx, cy);
 		},
 	hit : function(shape) {
 		if(!this.parent(shape))

@@ -66,7 +66,7 @@ var Game=new Class({
 		this.playSound('bg');
 		this.controlableSprites=new Array();
 		this.controlledSprite=0;
-		this.sprites=new Array(new Tank(this,33,33,1,0,{'t':13,'maxSpeed':3,'turret':true,'shapes':[{'type':'Circle','r':10}]}),
+		this.sprites=new Array(new Tank(this,33,33,1,0,{'t':13,'maxSpeed':3,'turret':true,'shapes':[{'type':'Rectangle','w':20,'h':20,'cx':10,'cy':10}]}),
 			new Tank(this,165,165,1,0,{'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'a':Math.PI,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':10}]}),
 			new Tank(this,99,66,1,0,{'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'shapes':[{'type':'Circle','dx':-2,'r':6},{'type':'Point','dx':9}]}),
 			new Tank(this,165,132,1,0,{'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'shapes':[{'type':'Circle','r':12}],'shapes':[{'type':'Circle','r':11}]}),
