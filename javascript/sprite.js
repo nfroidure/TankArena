@@ -60,12 +60,6 @@ var Sprite=new Class({
 			this.shapes[i].y=this.y-(this.shapes[i].cy?this.shapes[i].cy:0)+(this.shapes[i].dy?Math.cos(this.a*Math.PI/8)*this.shapes[i].dy:0)+(this.shapes[i].dx?Math.sin(this.a*Math.PI/8)*this.shapes[i].dx:0);
 			this.shapes[i].z=this.z+this.shapes[i].dz;
 			}
-		if(this.visionField)
-			{
-			this.visionField.x=this.x;
-			this.visionField.y=this.y;
-			this.visionField.z=this.z;
-			}
 		var newIndex=Math.floor(this.x/33)+'-'+Math.floor(this.y/33);
 		if(newIndex!=this.index)
 			{
