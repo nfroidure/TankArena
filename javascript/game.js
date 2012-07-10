@@ -66,18 +66,18 @@ var Game=new Class({
 		this.playSound('bg');
 		this.controlableSprites=new Array();
 		this.controlledSprite=0;
-		this.sprites=new Array(new Tank(this,33,33,1,0,{'t':13,'maxSpeed':3,'turret':true,'shapes':[{'type':'Rectangle','w':20,'h':20,'cx':10,'cy':10}]}),
-			new Tank(this,165,165,1,0,{'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'a':Math.PI,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':10}]}),
-			new Tank(this,99,66,1,0,{'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'shapes':[{'type':'Circle','dx':-2,'r':6},{'type':'Point','dx':9}]}),
-			new Tank(this,165,132,1,0,{'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'shapes':[{'type':'Circle','r':12}],'shapes':[{'type':'Circle','r':11}]}),
-			new Tank(this,165,66,1,0,{'t':17,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':0}],'solidity':4,'shapes':[{'type':'Circle','r':11}]}),
-			new Tank(this,330,66,1,0,{'t':18,'maxSpeed':4,'turret':false,'fireZones':[{'r':5,'a':0}],'solidity':1,'shapes':[{'type':'Circle','r':4}]}),
-			new Tank(this,330,330,1,0,{'t':19,'maxSpeed':4,'turret':true,'fireZones':[{'r':10,'a':-Math.PI/3},{'r':10,'a':0},{'r':10,'a':Math.PI/3}],'solidity':3,'shapes':[{'type':'Circle','r':8}]}),
-			new Tank(this,330,181,1,0,{'t':20,'maxSpeed':3,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':3,'shapes':[{'type':'Circle','r':11}]}),
-			new Tank(this,363,181,1,0,{'t':10,'maxSpeed':11,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':12},{'type':'Point','dy':15},{'type':'Point','dy':-15}]}),
-			new Tank(this,396,181,1,0,{'t':11,'maxSpeed':13,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':2,'r':5},{'type':'Point','dx':11},{'type':'Point','dx':2,'dy':15},{'type':'Point','dx':2,'dy':-15}]}),
-			new Tank(this,429,181,1,0,{'t':12,'maxSpeed':16,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-4,'r':11},{'type':'Point','dx':12}]}),
-			new Tank(this,285,220,1,0,{'t':25,'maxSpeed':0,'turret':false,'fireZones':[{'r':14,'a':0}],'solidity':6,'shapes':[{'type':'Circle','r':7},{'type':'Point','dx':12}]}),
+		this.sprites=new Array(new Tank(this,33,33,1,0,{'team':1,'t':13,'maxSpeed':3,'turret':true,'shapes':[{'type':'Rectangle','w':20,'h':20,'cx':10,'cy':10}]}),
+			new Tank(this,165,165,1,0,{'team':1,'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'a':Math.PI,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':10}]}),
+			new Tank(this,99,66,1,0,{'team':1,'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'shapes':[{'type':'Circle','dx':-2,'r':6},{'type':'Point','dx':9}]}),
+			new Tank(this,165,132,1,0,{'team':2,'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'shapes':[{'type':'Circle','r':12}],'shapes':[{'type':'Circle','r':11}]}),
+			new Tank(this,165,66,1,0,{'team':2,'t':17,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':0}],'solidity':4,'shapes':[{'type':'Circle','r':11}]}),
+			new Tank(this,330,66,1,0,{'team':2,'t':18,'maxSpeed':4,'turret':false,'fireZones':[{'r':5,'a':0}],'solidity':1,'shapes':[{'type':'Circle','r':4}]}),
+			new Tank(this,330,330,1,0,{'team':2,'t':19,'maxSpeed':4,'turret':true,'fireZones':[{'r':10,'a':-Math.PI/3},{'r':10,'a':0},{'r':10,'a':Math.PI/3}],'solidity':3,'shapes':[{'type':'Circle','r':8}]}),
+			new Tank(this,330,181,1,0,{'team':2,'t':20,'maxSpeed':3,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':3,'shapes':[{'type':'Circle','r':11}]}),
+			new Tank(this,363,181,1,0,{'team':2,'t':10,'maxSpeed':11,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':12},{'type':'Point','dy':15},{'type':'Point','dy':-15}]}),
+			new Tank(this,396,181,1,0,{'team':2,'t':11,'maxSpeed':13,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':2,'r':5},{'type':'Point','dx':11},{'type':'Point','dx':2,'dy':15},{'type':'Point','dx':2,'dy':-15}]}),
+			new Tank(this,429,181,1,0,{'team':1,'t':12,'maxSpeed':16,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-4,'r':11},{'type':'Point','dx':12}]}),
+			new Tank(this,285,220,1,0,{'team':2,'t':25,'maxSpeed':0,'turret':false,'fireZones':[{'r':14,'a':0}],'solidity':6,'shapes':[{'type':'Circle','r':7},{'type':'Point','dx':12}]}),
 			//Man new Tank(this,363,330,1,0,{'t':26,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':6}),
 			new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
 		this.resume();
@@ -380,7 +380,14 @@ var Game=new Class({
 				this.controlableSprites[this.controlledSprite].fire(e.control);
 				break;
 			case 'tab':
-				this.controlledSprite=(this.controlledSprite+1)%this.controlableSprites.length;
+				for(var i=this.controlledSprite+this.controlableSprites.length-1; i>=0; i--)
+					{
+					if(this.controlableSprites[i%this.controlableSprites.length].team==1)
+						{
+						this.controlledSprite=i%this.controlableSprites.length;
+						break;
+						}
+					}
 				this.controlableSprites[this.controlledSprite].setDirection(0);
 				this.controlableSprites[this.controlledSprite].setWay(0);
 				break;

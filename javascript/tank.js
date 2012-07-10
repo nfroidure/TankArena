@@ -21,6 +21,7 @@ var Tank=new Class({
 		if(!specs)
 			specs={};
 		this.t=(specs.t?specs.t:2);
+		this.team=(specs.team?specs.team:1);
 		this.hasTurret=(specs.turret?true:false);
 		this.hasWings=(specs.fly?true:false);
 		this.inerty=(specs.fly?0.1:1);
@@ -118,7 +119,7 @@ var Tank=new Class({
 			var nearestSprite;
 			for(var i=nearSprites.length-1; i>=0; i--)
 				{
-				if(nearSprites[i] instanceof Controlable)
+				if(nearSprites[i].team!=this.team&&nearSprites[i] instanceof Controlable)
 					{
 					var spriteVal=Math.abs(nearSprites[i].index.split('-')[0]-pos[0])+Math.abs(nearSprites[i].index.split('-')[1]-pos[1]);
 					if((!nearestSprite)||spriteVal<nearestSpriteVal)
@@ -157,6 +158,9 @@ var Tank=new Class({
 				return true;
 				}
 			}
+		this.direction=0;
+		this.turretDirection=0;
+		this.way=0;
 		return false;
 		}, 
 	destruct : function() {
