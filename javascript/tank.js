@@ -28,8 +28,14 @@ var Tank=new Class({
 		this.maxSpeed=(specs.maxSpeed||specs.maxSpeed===0?specs.maxSpeed:3);
 		this.solidity=(specs.solidity?specs.solidity:2);
 		this.fireZones=(specs.fireZones?specs.fireZones:[{'r':10,'a':0}]);
+		this.waitLoad=0;
+		this.visionField=new Circle(this.x,this.y,this.z,specs.vision?specs.vision:50);
 		},
 	move : function() {
+		if(this.game.controlableSprites[this.game.controlledSprite]!=this)
+			{
+			this.computerMove();
+			}
 		var moved=this.parent();
 		if(this.hasWings)
 			{
@@ -44,6 +50,8 @@ var Tank=new Class({
 		else if(this.turretDirection!=0)
 			this.ta=(16+this.ta+this.turretDirection)%16;
 		this.animStep=(this.animStep+1)%5;
+		if(this.waitLoad)
+			this.waitLoad--;
 		return moved;
 		},
 	draw : function() {
@@ -77,7 +85,7 @@ var Tank=new Class({
 			}
 		},
 	fire : function(secondary) {
-		if(this.life>0)
+		if(this.life>0&&!this.waitLoad)
 			{
 			var ta=(this.fireZones[this.curFireZone].a?this.fireZones[this.curFireZone].a:0)+this.ta;
 			var x=(Math.cos(ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
@@ -99,9 +107,53 @@ var Tank=new Class({
 					else if(this.a==(this.ta+Math.PI)%(2*Math.PI))
 						this.speed=this.maxSpeed;
 					}
+				this.waitLoad=60;
 				}
 			}
 		},
+	computerMove : function() {
+		var pos=this.index.split('-');
+		var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),3);
+		var nearestSprite;
+		for(var i=nearSprites.length-1; i>=0; i--)
+			{
+			if(nearSprites[i] instanceof Controlable)
+				{
+				var spriteVal=Math.abs(nearSprites[i].index.split('-')[0]-pos[0])+Math.abs(nearSprites[i].index.split('-')[1]-pos[1]);
+				if((!nearestSprite)||spriteVal<nearestSpriteVal)
+					{
+					nearestSprite=nearSprites[i];
+					nearestSpriteVal=spriteVal;
+					}
+				}
+			}
+		if(nearestSprite)
+			{
+			var a=Math.round((((2*Math.PI)+Math.atan2(nearestSprite.y-this.y, nearestSprite.x-this.x))%(2*Math.PI))/(2*Math.PI)*16);
+			if(a-this.a<0)
+				this.direction=-1;
+			else if(a-this.a>0)
+				this.direction=1;
+			else
+				this.direction=0;
+			if(this.hasTurret)
+				{
+				if(a-this.ta<0)
+					this.turretDirection=-1;
+				else if(a-this.ta>0)
+					this.turretDirection=1;
+				else
+					this.turretDirection=0;
+				}
+			if(this.waitLoad==0&&this.direction==0&&this.turretDirection==0)
+				{
+				this.fire();
+				}
+			// set way to 1
+			return true;
+			}
+		return false;
+		}, 
 	destruct : function() {
 		}
 });

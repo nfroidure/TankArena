@@ -60,6 +60,12 @@ var Sprite=new Class({
 			this.shapes[i].y=this.y-(this.shapes[i].cy?this.shapes[i].cy:0)+(this.shapes[i].dy?Math.cos(this.a*Math.PI/8)*this.shapes[i].dy:0)+(this.shapes[i].dx?Math.sin(this.a*Math.PI/8)*this.shapes[i].dx:0);
 			this.shapes[i].z=this.z+this.shapes[i].dz;
 			}
+		if(this.visionField)
+			{
+			this.visionField.x=this.x;
+			this.visionField.y=this.y;
+			this.visionField.z=this.z;
+			}
 		var newIndex=Math.floor(this.x/33)+'-'+Math.floor(this.y/33);
 		if(newIndex!=this.index)
 			{
@@ -124,6 +130,15 @@ var Sprite=new Class({
 				}
 			else if(this.shapes[i] instanceof Rectangle)
 				this.game.contexts[this.game.numCanvas-1].strokeRect((this.shapes[i].x*this.game.zoom)-2+this.game.decalX,(this.shapes[i].y*this.game.zoom)-2+this.game.decalY,(this.shapes[i].w*this.game.zoom)+4,(this.shapes[i].h*this.game.zoom)+4);
+			}
+		if(this.visionField)
+			{
+			this.game.contexts[this.game.numCanvas-1].fillStyle='#DDDDDD';
+			this.game.contexts[this.game.numCanvas-1].strokeStyle='#DDDDDD';
+			this.game.contexts[this.game.numCanvas-1].beginPath();
+			this.game.contexts[this.game.numCanvas-1].arc((this.visionField.x*this.game.zoom)+this.game.decalX,(this.visionField.y*this.game.zoom)+this.game.decalY,this.visionField.r*this.game.zoom,0,Math.PI*2,true);
+			this.game.contexts[this.game.numCanvas-1].stroke();
+			this.game.contexts[this.game.numCanvas-1].closePath();
 			}
 		},
 	destruct : function() {
