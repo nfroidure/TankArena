@@ -78,7 +78,7 @@ var Game=new Class({
 			new Tank(this,396,181,1,0,{'team':2,'t':11,'maxSpeed':13,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':2,'r':5},{'type':'Point','dx':11},{'type':'Point','dx':2,'dy':15},{'type':'Point','dx':2,'dy':-15}]}),
 			new Tank(this,429,181,1,0,{'team':1,'t':12,'maxSpeed':16,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-4,'r':11},{'type':'Point','dx':12}]}),
 			new Tank(this,285,220,1,0,{'team':2,'t':25,'maxSpeed':0,'turret':false,'fireZones':[{'r':14,'a':0}],'solidity':6,'shapes':[{'type':'Circle','r':7},{'type':'Point','dx':12}]}),
-			//Man new Tank(this,363,330,1,0,{'t':26,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':6}),
+			new Tank(this,363,330,1,0,{'t':26,'maxSpeed':7,'turret':true,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':6}),
 			new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
 		this.resume();
 		},
@@ -157,7 +157,7 @@ var Game=new Class({
 			this.timer=this.main.delay(1000/this.fps, this);
 			}
 		},
-	/* Sprites management */
+	/* Sprites management *
 	getNearSprites : function(sprite,grixX,gridY,hitField) {
 		var nearSprites=new Array();
 		for(var k=(grixX>hitField?grixX-hitField:0),	l=(grixX<this.map.w-hitField?grixX+hitField:this.map.w); k<l; k++)
@@ -171,6 +171,29 @@ var Game=new Class({
 						if(sprite!=this.grid[k+'-'+m][j])
 							{
 							nearSprites.push(this.grid[k+'-'+m][j]);
+							}
+						}
+					}
+				}
+			}
+		return nearSprites;
+		},
+	/* Sprites management */
+	getNearSprites : function(sprite,grixX,gridY,hitField) {
+		var nearSprites=new Array();
+		for(var k=grixX-hitField,	l=grixX+hitField; k<l; k++)
+			{
+			for(var m=gridY-hitField, n=gridY+hitField; m<n; m++)
+				{
+				var x=(this.map.w+k)%this.map.w;
+				var y=(this.map.h+m)%this.map.h;
+				if(this.grid[x+'-'+y]&&this.grid[x+'-'+y].length)
+					{
+					for(var j=this.grid[x+'-'+y].length-1; j>=0; j--)
+						{
+						if(sprite!=this.grid[x+'-'+y][j])
+							{
+							nearSprites.push(this.grid[x+'-'+y][j]);
 							}
 						}
 					}

@@ -114,24 +114,91 @@ var Tank=new Class({
 	computerMove : function() {
 		if(this.life)
 			{
+			// Getting near sprites
 			var pos=this.index.split('-');
-			var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),6);
-			var nearestSprite;
+			var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),(this.hasWings&&this.z?this.z*10:10));
+			var nearestSprite, nearestSpritePoint, nearestSpriteDistance,  currentSpriteDistance;
+			// Trying to locate the nearest
 			for(var i=nearSprites.length-1; i>=0; i--)
 				{
 				if(nearSprites[i].team!=this.team&&nearSprites[i] instanceof Controlable)
 					{
-					var spriteVal=Math.abs(nearSprites[i].index.split('-')[0]-pos[0])+Math.abs(nearSprites[i].index.split('-')[1]-pos[1]);
-					if((!nearestSprite)||spriteVal<nearestSpriteVal)
+					// Testing real position
+					currentSpriteDistance=Math.pow(this.x-nearSprites[i].x,2) + Math.pow(this.y-nearSprites[i].y,2);
+					if((!nearestSprite)||nearestSpriteDistance>currentSpriteDistance)
 						{
+						nearestSpriteDistance=currentSpriteDistance;
 						nearestSprite=nearSprites[i];
-						nearestSpriteVal=spriteVal;
+						nearestSpritePoint={'x':nearSprites[i].x,'y':nearSprites[i].y};
+						}
+					// Testing virtual positions
+					// x-w, y : left
+					currentSpriteDistance=Math.pow(this.x-(nearSprites[i].x-(this.game.map.w*this.game.tileSize)),2)
+						+ Math.pow(this.y-nearSprites[i].y,2);
+					if(nearestSpriteDistance>currentSpriteDistance)
+						{
+						nearestSpriteDistance=currentSpriteDistance;
+						nearestSprite=nearSprites[i];
+						nearestSpritePoint={'x':nearSprites[i].x-(this.game.map.w*this.game.tileSize),
+							'y':nearSprites[i].y};
+						}
+					// x+w, y : right
+					currentSpriteDistance=Math.pow(this.x-(nearSprites[i].x+(this.game.map.w*this.game.tileSize)),2)
+						+ Math.pow(this.y-nearSprites[i].y,2);
+					if(nearestSpriteDistance>currentSpriteDistance)
+						{
+						nearestSpriteDistance=currentSpriteDistance;
+						nearestSprite=nearSprites[i];
+						nearestSpritePoint={'x':nearSprites[i].x+(this.game.map.w*this.game.tileSize),
+							'y':nearSprites[i].y};
+						}
+					// x, y-h : upper
+					currentSpriteDistance=Math.pow(this.x-nearSprites[i].x,2)
+						+ Math.pow(this.y-(nearSprites[i].y-(this.game.map.h*this.game.tileSize)),2);
+					if(nearestSpriteDistance>currentSpriteDistance)
+						{
+						nearestSpriteDistance=currentSpriteDistance;
+						nearestSprite=nearSprites[i];
+						nearestSpritePoint={'x':nearSprites[i].x,
+							'y':nearSprites[i].y-(this.game.map.h*this.game.tileSize)};
+						}
+					// x, y+h : bottom
+					currentSpriteDistance=Math.pow(this.x-nearSprites[i].x,2)
+						+ Math.pow(this.y-(nearSprites[i].y+(this.game.map.h*this.game.tileSize)),2);
+					if(nearestSpriteDistance>currentSpriteDistance)
+						{
+						nearestSpriteDistance=currentSpriteDistance;
+						nearestSprite=nearSprites[i];
+						nearestSpritePoint={'x':nearSprites[i].x,
+							'y':nearSprites[i].y+(this.game.map.h*this.game.tileSize)};
+						}
+					// x-w, y-h : upper-right
+					currentSpriteDistance=Math.pow(this.x-(nearSprites[i].x-(this.game.map.w*this.game.tileSize)),2)
+						+ Math.pow(this.y-(nearSprites[i].y-(this.game.map.h*this.game.tileSize)),2);
+					if(nearestSpriteDistance>currentSpriteDistance)
+						{
+						nearestSpriteDistance=currentSpriteDistance;
+						nearestSprite=nearSprites[i];
+						nearestSpritePoint={'x':nearSprites[i].x-(this.game.map.w*this.game.tileSize),
+							'y':nearSprites[i].y-(this.game.map.h*this.game.tileSize)};
+						}
+					// x+w, y+h : upper-right
+					currentSpriteDistance=Math.pow(this.x-(nearSprites[i].x+(this.game.map.w*this.game.tileSize)),2)
+						+ Math.pow(this.y-(nearSprites[i].y+(this.game.map.h*this.game.tileSize)),2);
+					if(nearestSpriteDistance>currentSpriteDistance)
+						{
+						nearestSpriteDistance=currentSpriteDistance;
+						nearestSprite=nearSprites[i];
+						nearestSpritePoint={'x':nearSprites[i].x+(this.game.map.w*this.game.tileSize),
+							'y':nearSprites[i].y+(this.game.map.h*this.game.tileSize)};
 						}
 					}
 				}
+			// Following/attacking him
 			if(nearestSprite)
 				{
-				var a=Math.round((((2*Math.PI)+Math.atan2(nearestSprite.y-this.y, nearestSprite.x-this.x))%(2*Math.PI))/(2*Math.PI)*16);
+				var a=0;
+				a=Math.round((((2*Math.PI)+Math.atan2(nearestSpritePoint.y-this.y, nearestSpritePoint.x-this.x))%(2*Math.PI))/(2*Math.PI)*16);
 				if(a-this.a<0)
 					this.direction=-1;
 				else if(a-this.a>0)
@@ -151,7 +218,7 @@ var Tank=new Class({
 					{
 					this.fire();
 					}
-				if(spriteVal>4)
+				if(Math.sqrt(nearestSpriteDistance)>4*this.game.tileSize)
 					this.way=1;
 				else
 					this.way=0;
