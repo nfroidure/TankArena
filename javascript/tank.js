@@ -28,6 +28,7 @@ var Tank=new Class({
 		this.acceleration=(specs.fly?0.5:1);
 		this.maxSpeed=(specs.maxSpeed||specs.maxSpeed===0?specs.maxSpeed:3);
 		this.solidity=(specs.solidity?specs.solidity:2);
+		this.detectionField=(specs.detectionField?specs.detectionField:6);
 		this.fireZones=(specs.fireZones?specs.fireZones:[{'r':10,'a':0}]);
 		this.waitLoad=0;
 		},
@@ -116,7 +117,7 @@ var Tank=new Class({
 			{
 			// Getting near sprites
 			var pos=this.index.split('-');
-			var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),(this.hasWings&&this.z?this.z*10:10));
+			var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),(this.hasWings&&this.z?this.z:1)*this.detectionField);
 			var nearestSprite, nearestSpritePoint, nearestSpriteDistance,  currentSpriteDistance;
 			// Trying to locate the nearest
 			for(var i=nearSprites.length-1; i>=0; i--)
@@ -195,16 +196,10 @@ var Tank=new Class({
 					}
 				}
 			// Following/attacking him
-			if(nearestSprite)
+			if(nearestSprite&&Math.sqrt(nearestSpriteDistance)<this.detectionField*this.game.tileSize)
 				{
-				var a=0;
-				a=Math.round((((2*Math.PI)+Math.atan2(nearestSpritePoint.y-this.y, nearestSpritePoint.x-this.x))%(2*Math.PI))/(2*Math.PI)*16);
-				if(a-this.a<0)
-					this.direction=-1;
-				else if(a-this.a>0)
-					this.direction=1;
-				else
-					this.direction=0;
+				this.setTargets(nearestSpritePoint);
+				var a=this.target();
 				if(this.hasTurret)
 					{
 					if(a-this.ta<0)
@@ -216,18 +211,20 @@ var Tank=new Class({
 					}
 				if(this.waitLoad==0&&this.direction==0&&this.turretDirection==0)
 					{
+					// Should not fire if the anmo is more limited
 					this.fire();
 					}
 				if(Math.sqrt(nearestSpriteDistance)>4*this.game.tileSize)
 					this.way=1;
-				else
+				else if(!this.hasWings)
 					this.way=0;
 				return true;
 				}
 			}
 		this.direction=0;
 		this.turretDirection=0;
-		this.way=0;
+		if(!this.hasWings) // planes never stops, too long to implement
+			this.way=0;
 		return false;
 		}, 
 	destruct : function() {

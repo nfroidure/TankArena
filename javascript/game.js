@@ -413,6 +413,7 @@ var Game=new Class({
 					}
 				this.controlableSprites[this.controlledSprite].setDirection(0);
 				this.controlableSprites[this.controlledSprite].setWay(0);
+				this.controlableSprites[this.controlledSprite].setTargets();
 				break;
 			default:
 				used=false;

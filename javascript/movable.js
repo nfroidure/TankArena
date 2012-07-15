@@ -20,12 +20,16 @@ var Movable=new Class({
 		this.maxSpeed=0;
 		this.acceleration=1;
 		this.inerty=1;
+		this.targets=new Array();
 		},
+	// Move management
 	move : function() {
 		var moved=false;
 		this.prevX=this.x;
 		this.prevY=this.y;
 		this.prevA=this.a;
+		// Computing targets
+		this.target();
 		// Rotating
 		if(this.direction!=0)
 			{
@@ -78,6 +82,31 @@ var Movable=new Class({
 		else
 			this.way=way;
 		},
+	// Targets management
+	setTargets : function() {
+		this.targets=arguments;
+		},
+	addTarget : function(target) {
+		this.target.push(target);
+		},
+	target : function() {
+		if(this.targets.length)
+			{
+			// Finding the angle
+			var a=0;
+			a=Math.round((((2*Math.PI)+Math.atan2(this.targets[this.targets.length-1].y-this.y, this.targets[this.targets.length-1].x-this.x))%(2*Math.PI))/(2*Math.PI)*16);
+			// Adjusting the direction to atteign it
+			if(a-this.a<0)
+				this.direction=-1;
+			else if(a-this.a>0)
+				this.direction=1;
+			else
+				this.direction=0;
+			return a;
+			}
+		return 0;
+		},
+	// Hits management
 	hits : function() {
 		var spriteHitted=this.parent();
 		if(spriteHitted)
