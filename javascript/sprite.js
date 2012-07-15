@@ -105,7 +105,6 @@ var Sprite=new Class({
 		var index=this.game.sprites.indexOf(this);
 		if(index>=0)
 			this.game.sprites.splice(index,1);
-		index=this.game.controlableSprites.indexOf(this);
 		if(this.index!=-1)
 			this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);
 		},

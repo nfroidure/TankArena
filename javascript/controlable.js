@@ -23,12 +23,8 @@ var Controlable=new Class({
 		if(index>=0)
 			{
 			this.game.controlableSprites.splice(index,1);
-			if(index<this.game.controlledSprite)
-				this.game.controlledSprite--;
-			else if(index==this.game.controlledSprite)
-				{
-				this.game.controlledSprite=this.game.controlledSprite%this.game.controlableSprites.length;
-				}
+			if(index==this.game.controlledSprite)
+				this.game.changeControlledSprite(true);
 			}
 		},
 	destruct : function() {

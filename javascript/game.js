@@ -157,28 +157,21 @@ var Game=new Class({
 			this.timer=this.main.delay(1000/this.fps, this);
 			}
 		},
-	/* Sprites management *
-	getNearSprites : function(sprite,grixX,gridY,hitField) {
-		var nearSprites=new Array();
-		for(var k=(grixX>hitField?grixX-hitField:0),	l=(grixX<this.map.w-hitField?grixX+hitField:this.map.w); k<l; k++)
+	/* Sprites management */
+	changeControlledSprite : function(reverse) {
+		for(var i=this.controlledSprite+(reverse?-1:1), j=this.controlableSprites.length; i<j*2&&i>=j*-2; i+=(reverse?-1:1))
 			{
-			for(var m=(gridY>hitField?gridY-hitField:0), n=(gridY<this.map.h-hitField?gridY+hitField:this.map.h); m<n; m++)
+			if(this.controlableSprites[Math.abs(i%j)].team==1)
 				{
-				if(this.grid[k+'-'+m]&&this.grid[k+'-'+m].length)
-					{
-					for(var j=this.grid[k+'-'+m].length-1; j>=0; j--)
-						{
-						if(sprite!=this.grid[k+'-'+m][j])
-							{
-							nearSprites.push(this.grid[k+'-'+m][j]);
-							}
-						}
-					}
+				this.controlledSprite=Math.abs(i%j);
+				break;
 				}
 			}
-		return nearSprites;
+		// Shoudl test if there is always a controllable sprite an do something (game over probably)
+		this.controlableSprites[this.controlledSprite].setDirection(0);
+		this.controlableSprites[this.controlledSprite].setWay(0);
+		this.controlableSprites[this.controlledSprite].setTargets();
 		},
-	/* Sprites management */
 	getNearSprites : function(sprite,grixX,gridY,hitField) {
 		var nearSprites=new Array();
 		for(var k=grixX-hitField,	l=grixX+hitField; k<l; k++)
@@ -403,17 +396,7 @@ var Game=new Class({
 				this.controlableSprites[this.controlledSprite].fire(e.control);
 				break;
 			case 'tab':
-				for(var i=this.controlledSprite+this.controlableSprites.length-1; i>=0; i--)
-					{
-					if(this.controlableSprites[i%this.controlableSprites.length].team==1)
-						{
-						this.controlledSprite=i%this.controlableSprites.length;
-						break;
-						}
-					}
-				this.controlableSprites[this.controlledSprite].setDirection(0);
-				this.controlableSprites[this.controlledSprite].setWay(0);
-				this.controlableSprites[this.controlledSprite].setTargets();
+				this.changeControlledSprite(e.shift);
 				break;
 			default:
 				used=false;
