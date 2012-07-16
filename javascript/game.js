@@ -327,6 +327,20 @@ var Game=new Class({
 	moveHandler : function(e) {
 		},
 	clickHandler : function(e) {
+		console.log({'x':this.decalX+e.page.x-this.canvas[0].getPosition().x,'y':this.decalY+e.page.y-this.canvas[0].getPosition().y});
+		console.log(this.controlableSprites[this.controlledSprite]);
+		if(e.rightClick)
+			{
+			this.controlableSprites[this.controlledSprite].setTargets();
+			this.controlableSprites[this.controlledSprite].setWay(0);
+			this.controlableSprites[this.controlledSprite].setDirection(0);
+			e.stop();
+			}
+		else
+			{
+			this.controlableSprites[this.controlledSprite][e.control?'addTarget':'setTargets']({'x':(e.page.x-this.canvas[0].getPosition().x)/this.zoom,'y':(e.page.y-this.canvas[0].getPosition().y)/this.zoom});
+			this.controlableSprites[this.controlledSprite].setWay(1);
+			}
 		},
 	keyDownHandler : function(e) {
 		var used=true;
