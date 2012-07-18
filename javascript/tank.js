@@ -33,10 +33,6 @@ var Tank=new Class({
 		this.waitLoad=0;
 		},
 	move : function() {
-		if(this.game.controlableSprites[this.game.controlledSprite]!=this)
-			{
-			this.computerMove();
-			}
 		var moved=this.parent();
 		if(this.hasWings)
 			{
@@ -112,13 +108,13 @@ var Tank=new Class({
 				}
 			}
 		},
-	computerMove : function() {
-		if(this.life)
+	target : function() {
+		var nearestSprite, nearestSpritePoint, nearestSpriteDistance,  currentSpriteDistance, a=-1;
+		if(this.game.controlableSprites[this.game.controlledSprite]!=this&&this.life)
 			{
 			// Getting near sprites
 			var pos=this.index.split('-');
 			var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),(this.hasWings&&this.z?this.z:1)*this.detectionField);
-			var nearestSprite, nearestSpritePoint, nearestSpriteDistance,  currentSpriteDistance;
 			// Trying to locate the nearest
 			for(var i=nearSprites.length-1; i>=0; i--)
 				{
@@ -199,7 +195,7 @@ var Tank=new Class({
 			if(nearestSprite&&Math.sqrt(nearestSpriteDistance)<this.detectionField*this.game.tileSize)
 				{
 				this.setTargets(nearestSpritePoint);
-				var a=this.target();
+				a=this.parent(4*this.game.tileSize);
 				if(this.hasTurret)
 					{
 					if(a-this.ta<0)
@@ -218,14 +214,20 @@ var Tank=new Class({
 					this.way=1;
 				else if(!this.hasWings)
 					this.way=0;
-				return true;
+				}
+			else
+				{
+				this.direction=0;
+				this.turretDirection=0;
+				if(!this.hasWings) // planes never stops, too long to implement
+					this.way=0;
 				}
 			}
-		this.direction=0;
-		this.turretDirection=0;
-		if(!this.hasWings) // planes never stops, too long to implement
-			this.way=0;
-		return false;
+		else
+			{
+			a=this.parent();
+			}
+		return a;
 		}, 
 	destruct : function() {
 		}

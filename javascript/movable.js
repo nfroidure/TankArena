@@ -91,33 +91,32 @@ var Movable=new Class({
 	addTarget : function(target) {
 		this.targets.push(target);
 		},
-	target : function() {
+	target : function(distanceMin) {
 		if(this.targets.length)
 			{
-			// Measuring the distance to the target
-			if(Math.sqrt(Math.pow(this.x-this.targets[0].x,2) + Math.pow(this.y-this.targets[0].y,2))<this.game.tileSize)
-				{
-				this.targets.splice(0,1);
+			var a=Math.round((((2*Math.PI)+Math.atan2(this.targets[0].y-this.y, this.targets[0].x-this.x))%(2*Math.PI))/(2*Math.PI)*16)%16;
+			// Adjusting the direction to atteign it (needs improvement)
+			if(a-this.a<0)
+				this.direction=-1;
+			else if(a-this.a>0)
+				this.direction=1;
+			else
 				this.direction=0;
+			// Measuring the distance to the target
+			if(Math.sqrt(Math.pow(this.x-this.targets[0].x,2) + Math.pow(this.y-this.targets[0].y,2))<(distanceMin?distanceMin:this.game.tileSize))
+				{
+				if(this.direction==0)
+					this.targets.splice(0,1);
 				this.way=0;
 				}
 			// Finding the angle
 			else
 				{
-				var a=0;
-				a=Math.round((((2*Math.PI)+Math.atan2(this.targets[0].y-this.y, this.targets[0].x-this.x))%(2*Math.PI))/(2*Math.PI)*16)%16;
-				// Adjusting the direction to atteign it
-				if(a-this.a<0)
-					this.direction=-1;
-				else if(a-this.a>0)
-					this.direction=1;
-				else
-					this.direction=0;
 				this.way=1;
-				return a;
 				}
+			return a;
 			}
-		return 0;
+		return -1;
 		},
 	// Hits management
 	hits : function() {
