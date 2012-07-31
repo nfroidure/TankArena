@@ -53,7 +53,7 @@ var Shot=new Class({
 		var hit=(sprite!=this.tank?this.parent(sprite):false);
 		if(hit&&sprite.damage)
 			{
-			sprite.damage(20);
+			sprite.damage(100);
 			this.game.playSound('explode');
 			}
 		return hit;
