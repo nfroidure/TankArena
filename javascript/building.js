@@ -11,11 +11,16 @@
 
 var Building=new Class({
 	Extends: Sprite,
-	initialize: function(game, x, y, z, t) {
+	initialize: function(game, x, y, z, t, specs) {
 		this.parent(game, x, y, z);
 		this.t=t;
 		this.w=this.game.tileSize;
 		this.h=this.game.tileSize;
+		// Building specs
+		if(!specs)
+			specs={};
+		this.solidity=(specs.solidity?specs.solidity:3);
+		this.detectionField=(specs.detectionField?specs.detectionField:3);
 		this.declarePositions();
 		this.shapes.push(new Rectangle(this.x,this.y,this.z,this.w,this.h));
 		},

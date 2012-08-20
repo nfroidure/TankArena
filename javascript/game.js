@@ -291,11 +291,11 @@ var Game=new Class({
 	playSound : function(sound) {
 		if(!this.muted)
 			{
-			this.sounds[sound].pause();
+			/*this.sounds[sound].pause();
 			if(!this.sounds[sound].getAttribute('loop'))
 				this.sounds[sound].currentTime=0;
-			this.sounds[sound].play();
-			//this.sounds[sound].cloneNode().play(); Download the sound each time!!! But could be a way to get multi-channel sound.
+			this.sounds[sound].play();*/
+			this.sounds[sound].cloneNode().play(); //Download the sound each time!!! But could be a way to get multi-channel sound.
 			}
 		},
 	stopSound : function(sound) {
