@@ -79,7 +79,7 @@ var Game=new Class({
 			new Tank(this,3150,750,1,0,{'team':2,'t':10,'maxSpeed':11,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':12},{'type':'Point','dy':15},{'type':'Point','dy':-15}]}),
 			new Tank(this,3180,810,1,0,{'team':2,'t':11,'maxSpeed':13,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':2,'r':5},{'type':'Point','dx':11},{'type':'Point','dx':2,'dy':15},{'type':'Point','dx':2,'dy':-15}]}),
 			new Tank(this,3210,560,1,0,{'team':2,'t':25,'maxSpeed':0,'turret':false,'fireZones':[{'r':14,'a':0}],'solidity':2,'shapes':[{'type':'Circle','r':7},{'type':'Point','dx':12}]}),
-			new Building(this,330,132,0,[8,14,15]),new Building(this,363,132,0,[8,14,15]),new Building(this,396,132,0,[8,14,15]));
+			new Building(this,330,132,0,{'t':[8,14,15]}),new Building(this,363,132,0,{'t':[8,14,15]}),new Building(this,396,132,0,{'t':[8,14,15]}));
 		this.resume();
 		},
 	pause : function() {

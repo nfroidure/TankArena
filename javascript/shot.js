@@ -10,32 +10,23 @@
  */
 
 var Shot=new Class({
-	Extends: Sprite,
-	initialize: function(game, tank, x, y, z, a) {
-		this.parent(game, x, y, z,[{'type':'Point'}]);
-		this.a=a; // Angle %pi/8 [0-16]
-		this.tank=tank;
+	Extends: Movable,
+	initialize: function(game, x, y, z, a, specs) {
+		specs.shapes=[{'type':'Point'}];
+		this.parent(game, x, y, z, a,specs);
+		this.tank=specs.tank;
 		this.t=13;
-		this.accel=1;
 		this.maxSpeed=5;
-		this.speed=(this.a==this.tank.a&&this.tank.speed?this.tank.speed+1:1);
+		this.speed=this.tank.speed+3;
+		this.acceleration=3;
+		this.way=1;
 		this.range=80;
 		},
 	move : function() {
 		if(this.range>0)
 			{
-			this.prevX=this.x;
-			this.prevY=this.y;
-			this.speed=this.speed+this.accel;
-			if(this.speed>this.maxSpeed)
-				this.speed=this.maxSpeed;
-			else if(this.speed<-(this.maxSpeed/2))
-				this.speed=-(this.maxSpeed/2);
-			this.x=this.x + (Math.cos(this.a*Math.PI/8)*this.speed);
-			this.y=this.y + (Math.sin(this.a*Math.PI/8)*this.speed);
 			this.range--;
-			this.declarePositions();
-			return true;
+			return this.parent();
 			}
 		else
 			this.remove();

@@ -10,16 +10,16 @@
  */
 
 var Movable=new Class({
-	Extends: Controlable,
-	initialize: function(game, x, y, z, shapes, a) {
-		this.parent(game, x, y, z, shapes);
+	Extends: Sprite,
+	initialize: function(game, x, y, z, a, specs) {
+		this.parent(game, x, y, z, specs);
 		this.direction=0;
 		this.a=a;
 		this.way=0;
-		this.speed=0;
-		this.maxSpeed=0;
-		this.acceleration=1;
-		this.inerty=1;
+		this.speed=(specs.speed?specs.speed:0);
+		this.inerty=(specs.inerty?specs.inerty:10);
+		this.acceleration=(specs.acceleration?specs.acceleration:30);
+		this.maxSpeed=(specs.maxSpeed||specs.maxSpeed===0?specs.maxSpeed:3);
 		this.targets=new Array();
 		},
 	// Move management
@@ -29,7 +29,13 @@ var Movable=new Class({
 		this.prevY=this.y;
 		this.prevA=this.a;
 		// Computing targets
-		this.target();
+		if(this.life)
+			this.target();
+		else
+			{
+			this.way=0;
+			this.direction=0;
+			}
 		// Rotating
 		if(this.direction!=0)
 			{
@@ -39,17 +45,17 @@ var Movable=new Class({
 		// Accelerating
 		if(this.maxSpeed&&this.way!=0)
 			{
-			this.speed=this.speed+(this.way*this.acceleration);
+			this.speed=this.speed+(this.way*this.acceleration*this.maxSpeed/100);
 			if(this.speed>this.maxSpeed)
 				this.speed=this.maxSpeed;
 			else if(this.speed<-(this.maxSpeed/2))
 				this.speed=-(this.maxSpeed/2);
 			}
-		else if(this.speed>0)
-			this.speed=this.speed-this.inerty;
-		else if(this.speed<0)
-			this.speed=this.speed+this.inerty;
-		if(Math.abs(this.speed)<this.inerty)
+		else if(this.speed!=0)
+			{
+			this.speed=this.speed+((this.speed>0?-1:1)*this.inerty*this.maxSpeed/100);
+			}
+		if(Math.abs(this.speed)<this.inerty*this.maxSpeed/100)
 			this.speed=0;
 		// Moving
 		if(this.speed)
@@ -123,14 +129,16 @@ var Movable=new Class({
 		var spriteHitted=this.parent();
 		if(spriteHitted)
 			{
-			this.speed=-(this.speed);
 			this.way=0;
-			this.x=this.prevX;
-			this.y=this.prevY;
-			this.a=this.prevA;
-			this.declarePositions();
 			if(!(spriteHitted instanceof Shot))
+				{
+				this.speed=-(this.speed);
+				this.x=this.prevX;
+				this.y=this.prevY;
+				this.a=this.prevA;
 				this.game.playSound('crash');
+				}
+			this.declarePositions();
 			}
 		return spriteHitted;
 		},

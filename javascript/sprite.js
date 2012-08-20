@@ -10,7 +10,7 @@
  */
 
 var Sprite=new Class({
-	initialize: function(game, x, y, z, shapes) {
+	initialize: function(game, x, y, z, specs) {
 		this.game = game;
 		this.tiles=new Array();
 		this.x=x;
@@ -18,9 +18,13 @@ var Sprite=new Class({
 		this.z=z;
 		this.a=0;
 		this.index=-1;
-		this.solidity=1;
 		this.life=100;
 		this.hitField=3;
+		// Specs
+		if(!specs)
+			specs={};
+		this.solidity=(specs.solidity?specs.solidity:1);
+		var shapes=(specs.shapes&&specs.shapes.length?specs.shapes:null)
 		this.shapes=new Array();
 		if(shapes&&shapes.length)
 			{

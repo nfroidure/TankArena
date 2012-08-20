@@ -11,9 +11,9 @@
  */
 
 var Controlable=new Class({
-	Extends: Sprite,
-	initialize: function(game, x, y, z, shapes) {
-		this.parent(game, x, y, z, shapes);
+	Extends: Movable,
+	initialize: function(game, x, y, z, a, specs) {
+		this.parent(game, x, y, z, a, specs);
 		this.game.controlableSprites.push(this);
 		this.owner=0; // LocalHuman / NetworkHuman / Computer
 		},
