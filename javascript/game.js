@@ -240,14 +240,14 @@ var Game=new Class({
 				{'i':0,'x':6,'y':8,'label':'Water BL 1'},
 				{'i':0,'x':7,'y':7,'label':'Water TR 1'},
 				{'i':0,'x':7,'y':8,'label':'Water BR 1'},
-				{'i':1,'x':0,'y':11,'label':'Hangar GV 1'},
+				{'i':1,'x':0,'y':1,'label':'Hangar GV 1'},
 				{'i':2,'x':0,'y':0,'label':'Tank 1'},
 				{'i':0,'x':3,'y':36,'label':'Road 1'},
 				{'i':0,'x':1,'y':36,'label':'Road 2'},
 				{'i':0,'x':4,'y':36,'label':'Road 3'},
 				{'i':3,'x':0,'y':6,'label':'Shot'},
-				{'i':1,'x':1,'y':11,'label':'Hangar GV 2'},
-				{'i':1,'x':2,'y':11,'label':'Hangar GV 3'}];
+				{'i':1,'x':1,'y':1,'label':'Hangar GV 2'},
+				{'i':1,'x':2,'y':1,'label':'Hangar GV 3'}];
 		this.images[n].src = uri;
 		this.loadingTiles++;
 		this.images[n].onload = this.tileImageLoaded.bind(this);
