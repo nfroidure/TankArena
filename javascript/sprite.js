@@ -77,12 +77,15 @@ var Sprite=new Class({
 			}
 		},
 	hits : function() {
-		var pos=this.index.split('-');
-		var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),this.hitField);
-		for(var i=nearSprites.length-1; i>=0; i--)
+		if(this.shapes.length)
 			{
-			if(this.hit(nearSprites[i]))
-				return nearSprites[i];
+			var pos=this.index.split('-');
+			var nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),this.hitField);
+			for(var i=nearSprites.length-1; i>=0; i--)
+				{
+				if(nearSprites[i].shapes.length&&this.hit(nearSprites[i]))
+					return nearSprites[i];
+				}
 			}
 		return false;
 		},

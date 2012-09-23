@@ -37,7 +37,7 @@ var Controlable=new Class({
 			this.way=0;
 			this.direction=0;
 			}
-		this.parent();
+		return this.parent();
 		},
 	// Targets management
 	setTargets : function() {
