@@ -288,14 +288,21 @@ var Game=new Class({
 		if(loop)
 			this.sounds[sound].setAttribute('loop','loop');
 		},
+	unregisterSounds : function() {
+		for(var sound in this.sounds)
+			{
+			this.stopSound(sound);
+			}
+		this.sounds=[];
+		},
 	playSound : function(sound) {
 		if(!this.muted)
 			{
-			/*this.sounds[sound].pause();
+			this.sounds[sound].pause();
 			if(!this.sounds[sound].getAttribute('loop'))
 				this.sounds[sound].currentTime=0;
-			this.sounds[sound].play();*/
-			this.sounds[sound].cloneNode().play(); //Download the sound each time!!! But could be a way to get multi-channel sound.
+			this.sounds[sound].play();
+			//this.sounds[sound].cloneNode().play(); //Download the sound each time!!! But could be a way to get multi-channel sound. Should register instances to stop them
 			}
 		},
 	stopSound : function(sound) {
@@ -430,6 +437,7 @@ var Game=new Class({
 	close : function() {
 		this.pause();
 		this.removeEvents();
+		this.unregisterSounds();
 		},
 	destruct : function() {
 		}
