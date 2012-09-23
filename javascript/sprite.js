@@ -53,8 +53,8 @@ var Sprite=new Class({
 					}
 				}
 			}
-		else
-			this.shapes.push(new Rectangle(this.x,this.y,this.z,this.game.tileSize,this.game.tileSize));
+		this.detectionField=(specs.detectionField?specs.detectionField:0);
+		this.team=(specs.team?specs.team:0);
 		this.declarePositions();
 		},
 	declarePositions : function() {

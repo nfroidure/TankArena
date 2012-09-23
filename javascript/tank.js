@@ -18,13 +18,12 @@ var Tank=new Class({
 		this.curFireZone=0;
 		this.animStep=0;
 		this.t=(specs.t?specs.t:2);
-		this.team=(specs.team?specs.team:1);
 		this.hasTurret=(specs.turret?true:false);
 		this.hasWings=(specs.fly?true:false);
 		if(this.inerty>2&&specs.fly)
 			this.inerty=2;
 		if(this.acceleration>4&&specs.fly)
-			this.acceleration=4;	
+			this.acceleration=4;
 		this.detectionField=(specs.detectionField?specs.detectionField:6);
 		this.fireZones=(specs.fireZones?specs.fireZones:[{'r':10,'a':0}]);
 		this.waitLoad=0;

@@ -69,7 +69,7 @@ var Game=new Class({
 		this.sprites=new Array(new Tank(this,33,33,1,0,{'team':1,'t':13,'maxSpeed':3,'turret':true,'shapes':[{'type':'Rectangle','w':20,'h':20,'cx':10,'cy':10}]}),
 			new Tank(this,165,165,1,0,{'team':1,'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'a':Math.PI,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':10}]}),
 			new Tank(this,99,66,1,0,{'team':1,'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'shapes':[{'type':'Circle','dx':-2,'r':6},{'type':'Point','dx':9}]}),
-			new Tank(this,363,330,1,0,{'t':26,'maxSpeed':1,'fireZones':[{'r':1}],'solidity':1,'shapes':[{'type':'Circle','r':2}],'solidity':1}),
+			new Tank(this,363,330,1,0,{'team':1,'t':26,'maxSpeed':1,'fireZones':[{'r':1}],'solidity':1,'shapes':[{'type':'Circle','r':2}],'solidity':1}),
 			new Tank(this,429,181,1,0,{'team':1,'t':12,'maxSpeed':16,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-4,'r':11},{'type':'Point','dx':12}]}),
 			new Tank(this,3000,1320,1,0,{'team':2,'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'shapes':[{'type':'Circle','r':12}],'shapes':[{'type':'Circle','r':11}]}),
 			new Tank(this,3030,690,1,0,{'team':2,'t':17,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':0}],'solidity':4,'shapes':[{'type':'Circle','r':11}]}),
