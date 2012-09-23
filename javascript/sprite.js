@@ -131,12 +131,12 @@ var Sprite=new Class({
 			else if(this.shapes[i] instanceof Rectangle)
 				this.game.contexts[this.game.numCanvas-1].strokeRect((this.shapes[i].x*this.game.zoom)-2+this.game.decalX,(this.shapes[i].y*this.game.zoom)-2+this.game.decalY,(this.shapes[i].w*this.game.zoom)+4,(this.shapes[i].h*this.game.zoom)+4);
 			}
-		if(this.visionField)
+		if(this.detectionField)
 			{
 			this.game.contexts[this.game.numCanvas-1].fillStyle='#DDDDDD';
 			this.game.contexts[this.game.numCanvas-1].strokeStyle='#DDDDDD';
 			this.game.contexts[this.game.numCanvas-1].beginPath();
-			this.game.contexts[this.game.numCanvas-1].arc((this.visionField.x*this.game.zoom)+this.game.decalX,(this.visionField.y*this.game.zoom)+this.game.decalY,this.visionField.r*this.game.zoom,0,Math.PI*2,true);
+			this.game.contexts[this.game.numCanvas-1].arc((this.x*this.game.zoom)+this.game.decalX,(this.y*this.game.zoom)+this.game.decalY,this.detectionField*this.game.tileSize*this.game.zoom,0,Math.PI*2,true);
 			this.game.contexts[this.game.numCanvas-1].stroke();
 			this.game.contexts[this.game.numCanvas-1].closePath();
 			}
