@@ -20,7 +20,6 @@ var Movable=new Class({
 		this.inerty=(specs.inerty?specs.inerty:10);
 		this.acceleration=(specs.acceleration?specs.acceleration:30);
 		this.maxSpeed=(specs.maxSpeed||specs.maxSpeed===0?specs.maxSpeed:3);
-		this.targets=new Array();
 		},
 	// Move management
 	move : function() {

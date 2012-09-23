@@ -16,6 +16,7 @@ var Controlable=new Class({
 		this.parent(game, x, y, z, a, specs);
 		this.game.controlableSprites.push(this);
 		this.owner=0; // LocalHuman / NetworkHuman / Computer
+		this.targets=new Array();
 		},
 	remove : function() {
 		this.parent();
@@ -63,7 +64,8 @@ var Controlable=new Class({
 				{
 				if(this.direction==0)
 					this.targets.splice(0,1);
-				this.way=0;
+				if(this.targets.length==0)
+					this.way=0;
 				}
 			// Finding the angle
 			else
