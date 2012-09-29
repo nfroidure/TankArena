@@ -19,7 +19,7 @@ var Shot=new Class({
 		this.maxSpeed=5;
 		this.speed=this.tank.speed+3;
 		this.acceleration=3;
-		this.way=1;
+		this.direction=1;
 		this.range=80;
 		},
 	move : function() {

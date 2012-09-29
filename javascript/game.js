@@ -167,9 +167,9 @@ var Game=new Class({
 				break;
 				}
 			}
-		// Shoudl test if there is always a controllable sprite an do something (game over probably)
+		// Shoudl test if there is aldirections a controllable sprite an do something (game over probably)
 		this.controlableSprites[this.controlledSprite].setRotation(0);
-		this.controlableSprites[this.controlledSprite].setWay(0);
+		this.controlableSprites[this.controlledSprite].setDirection(0);
 		this.controlableSprites[this.controlledSprite].setTargets();
 		},
 	getNearSprites : function(sprite,grixX,gridY,hitField) {
@@ -302,7 +302,7 @@ var Game=new Class({
 			if(!this.sounds[sound].getAttribute('loop'))
 				this.sounds[sound].currentTime=0;
 			this.sounds[sound].play();
-			//this.sounds[sound].cloneNode().play(); //Download the sound each time!!! But could be a way to get multi-channel sound. Should register instances to stop them
+			//this.sounds[sound].cloneNode().play(); //Download the sound each time!!! But could be a direction to get multi-channel sound. Should register instances to stop them
 			}
 		},
 	stopSound : function(sound) {
@@ -339,14 +339,14 @@ var Game=new Class({
 		if(e.rightClick)
 			{
 			this.controlableSprites[this.controlledSprite].setTargets();
-			this.controlableSprites[this.controlledSprite].setWay(0);
+			this.controlableSprites[this.controlledSprite].setDirection(0);
 			this.controlableSprites[this.controlledSprite].setRotation(0);
 			e.stop();
 			}
 		else
 			{
 			this.controlableSprites[this.controlledSprite][e.control?'addTarget':'setTargets']({'x':(e.page.x-this.canvas[0].getPosition().x)/this.zoom,'y':(e.page.y-this.canvas[0].getPosition().y)/this.zoom});
-			this.controlableSprites[this.controlledSprite].setWay(1);
+			this.controlableSprites[this.controlledSprite].setDirection(1);
 			}
 		},
 	keyDownHandler : function(e) {
@@ -381,10 +381,10 @@ var Game=new Class({
 		switch(e.key)
 			{
 			case 'down':
-				this.controlableSprites[this.controlledSprite].setWay(-1);
+				this.controlableSprites[this.controlledSprite].setDirection(-1);
 				break;
 			case 'up':
-				this.controlableSprites[this.controlledSprite].setWay(1);
+				this.controlableSprites[this.controlledSprite].setDirection(1);
 				break;
 			case 'left':
 				this.controlableSprites[this.controlledSprite].setRotation(-1,e.control);
@@ -407,7 +407,7 @@ var Game=new Class({
 			{
 			case 'down':
 			case 'up':
-				this.controlableSprites[this.controlledSprite].setWay(0);
+				this.controlableSprites[this.controlledSprite].setDirection(0);
 				break;
 			case 'left':
 			case 'right':

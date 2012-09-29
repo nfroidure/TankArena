@@ -106,7 +106,9 @@ var Sprite=new Class({
 			this.life=this.life-Math.round(power/this.solidity);
 			if(this.life<0)
 				this.life=0;
+			return true;
 			}
+		return false;
 		},
 	remove : function() {
 		var index=this.game.sprites.indexOf(this);

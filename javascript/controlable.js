@@ -34,7 +34,7 @@ var Controlable=new Class({
 			this.target();
 		else
 			{
-			this.way=0;
+			this.direction=0;
 			this.rotation=0;
 			}
 		return this.parent();
@@ -65,12 +65,12 @@ var Controlable=new Class({
 				if(this.rotation==0)
 					this.targets.splice(0,1);
 				if(this.targets.length==0)
-					this.way=0;
+					this.direction=0;
 				}
 			// Finding the angle
 			else
 				{
-				this.way=1;
+				this.direction=1;
 				}
 			return a;
 			}

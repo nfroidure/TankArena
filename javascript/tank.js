@@ -50,7 +50,7 @@ var Tank=new Class({
 	draw : function() {
 		if(this.life>0)
 			{
-			//this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.way?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
+			//this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+(this.direction?2:0), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			this.game.drawImage(this.t, (this.a+4)%8, Math.floor(((this.a+4)%16)/8)+((!this.speed)||this.animStep>2?0:2), this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
 			if(this.hasTurret)
 				this.game.drawImage(this.t, (this.ta+4)%8, Math.floor(((this.ta+4)%16)/8)+5, this.x-this.game.tileSize/2, this.y-this.game.tileSize/2, this.z, 1, 1);
@@ -207,16 +207,16 @@ var Tank=new Class({
 					this.fire();
 					}
 				if(Math.sqrt(nearestSpriteDistance)>4*this.game.tileSize)
-					this.way=1;
+					this.direction=1;
 				else if(!this.hasWings)
-					this.way=0;
+					this.direction=0;
 				}
 			else
 				{
 				this.rotation=0;
 				this.turretRotation=0;
 				if(!this.hasWings) // planes never stops, too long to implement
-					this.way=0;
+					this.direction=0;
 				}
 			}
 		else

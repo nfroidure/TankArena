@@ -15,7 +15,7 @@ var Movable=new Class({
 		this.parent(game, x, y, z, specs);
 		this.rotation=0;
 		this.a=a;
-		this.way=0;
+		this.direction=0;
 		this.speed=(specs.speed?specs.speed:0);
 		this.inerty=(specs.inerty?specs.inerty:10);
 		this.acceleration=(specs.acceleration?specs.acceleration:30);
@@ -34,9 +34,9 @@ var Movable=new Class({
 			moved=true;
 			}
 		// Accelerating
-		if(this.maxSpeed&&this.way!=0)
+		if(this.maxSpeed&&this.direction!=0)
 			{
-			this.speed=this.speed+(this.way*this.acceleration*this.maxSpeed/100);
+			this.speed=this.speed+(this.direction*this.acceleration*this.maxSpeed/100);
 			if(this.speed>this.maxSpeed)
 				this.speed=this.maxSpeed;
 			else if(this.speed<-(this.maxSpeed/2))
@@ -73,18 +73,18 @@ var Movable=new Class({
 		else
 			this.rotation=rotation;
 		},
-	setWay : function(way) {
-		if(way==0||this.life<1)
-			this.way=0;
+	setDirection : function(direction) {
+		if(direction==0||this.life<1)
+			this.direction=0;
 		else
-			this.way=way;
+			this.direction=direction;
 		},
 	// Hits management
 	hits : function() {
 		var spriteHitted=this.parent();
 		if(spriteHitted)
 			{
-			this.way=0;
+			this.direction=0;
 			if(!(spriteHitted instanceof Shot))
 				{
 				this.speed=-(this.speed);
