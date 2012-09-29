@@ -35,7 +35,7 @@ var Controlable=new Class({
 		else
 			{
 			this.way=0;
-			this.direction=0;
+			this.rotation=0;
 			}
 		return this.parent();
 		},
@@ -52,17 +52,17 @@ var Controlable=new Class({
 		if(this.targets.length)
 			{
 			var a=Math.round((((2*Math.PI)+Math.atan2(this.targets[0].y-this.y, this.targets[0].x-this.x))%(2*Math.PI))/(2*Math.PI)*16)%16;
-			// Adjusting the direction to atteign it (needs improvement)
+			// Adjusting the rotation to atteign it (needs improvement)
 			if(a-this.a<0)
-				this.direction=-1;
+				this.rotation=-1;
 			else if(a-this.a>0)
-				this.direction=1;
+				this.rotation=1;
 			else
-				this.direction=0;
+				this.rotation=0;
 			// Measuring the distance to the target
 			if(Math.sqrt(Math.pow(this.x-this.targets[0].x,2) + Math.pow(this.y-this.targets[0].y,2))<(distanceMin?distanceMin:this.game.tileSize))
 				{
-				if(this.direction==0)
+				if(this.rotation==0)
 					this.targets.splice(0,1);
 				if(this.targets.length==0)
 					this.way=0;

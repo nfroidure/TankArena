@@ -168,7 +168,7 @@ var Game=new Class({
 				}
 			}
 		// Shoudl test if there is always a controllable sprite an do something (game over probably)
-		this.controlableSprites[this.controlledSprite].setDirection(0);
+		this.controlableSprites[this.controlledSprite].setRotation(0);
 		this.controlableSprites[this.controlledSprite].setWay(0);
 		this.controlableSprites[this.controlledSprite].setTargets();
 		},
@@ -340,7 +340,7 @@ var Game=new Class({
 			{
 			this.controlableSprites[this.controlledSprite].setTargets();
 			this.controlableSprites[this.controlledSprite].setWay(0);
-			this.controlableSprites[this.controlledSprite].setDirection(0);
+			this.controlableSprites[this.controlledSprite].setRotation(0);
 			e.stop();
 			}
 		else
@@ -387,10 +387,10 @@ var Game=new Class({
 				this.controlableSprites[this.controlledSprite].setWay(1);
 				break;
 			case 'left':
-				this.controlableSprites[this.controlledSprite].setDirection(-1,e.control);
+				this.controlableSprites[this.controlledSprite].setRotation(-1,e.control);
 				break;
 			case 'right':
-				this.controlableSprites[this.controlledSprite].setDirection(1,e.control);
+				this.controlableSprites[this.controlledSprite].setRotation(1,e.control);
 				break;
 			case 'tab':
 				break;
@@ -411,7 +411,7 @@ var Game=new Class({
 				break;
 			case 'left':
 			case 'right':
-				this.controlableSprites[this.controlledSprite].setDirection(0);
+				this.controlableSprites[this.controlledSprite].setRotation(0);
 				break;
 			case 'space':
 				this.controlableSprites[this.controlledSprite].fire(e.control);

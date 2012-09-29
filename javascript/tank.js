@@ -13,7 +13,7 @@ var Tank=new Class({
 	Extends: Controlable,
 	initialize: function(game, x, y, z, a, specs) {
 		this.parent(game, x, y, z, a, specs);
-		this.turretDirection=0;
+		this.turretRotation=0;
 		this.ta=a;
 		this.curFireZone=0;
 		this.animStep=0;
@@ -40,8 +40,8 @@ var Tank=new Class({
 			}
 		if(!this.hasTurret)
 			this.ta=this.a;
-		else if(this.turretDirection!=0)
-			this.ta=(16+this.ta+this.turretDirection)%16;
+		else if(this.turretRotation!=0)
+			this.ta=(16+this.ta+this.turretRotation)%16;
 		this.animStep=(this.animStep+1)%5;
 		if(this.waitLoad)
 			this.waitLoad--;
@@ -61,13 +61,13 @@ var Tank=new Class({
 			}
 		this.parent();
 		},
-	setDirection : function(direction,turret) {
-		if(direction==0||this.life<1)
-			this.direction=this.turretDirection=0;
+	setRotation : function(rotation,turret) {
+		if(rotation==0||this.life<1)
+			this.rotation=this.turretRotation=0;
 		else if(turret)
-			this.turretDirection=direction;
+			this.turretRotation=rotation;
 		else
-			this.parent(direction);
+			this.parent(rotation);
 		},
 	damage : function(power) {
 		if(this.life==0)
@@ -195,13 +195,13 @@ var Tank=new Class({
 				if(this.hasTurret)
 					{
 					if(a-this.ta<0)
-						this.turretDirection=-1;
+						this.turretRotation=-1;
 					else if(a-this.ta>0)
-						this.turretDirection=1;
+						this.turretRotation=1;
 					else
-						this.turretDirection=0;
+						this.turretRotation=0;
 					}
-				if(this.waitLoad==0&&this.direction==0&&this.turretDirection==0)
+				if(this.waitLoad==0&&this.rotation==0&&this.turretRotation==0)
 					{
 					// Should not fire if the anmo is more limited
 					this.fire();
@@ -213,8 +213,8 @@ var Tank=new Class({
 				}
 			else
 				{
-				this.direction=0;
-				this.turretDirection=0;
+				this.rotation=0;
+				this.turretRotation=0;
 				if(!this.hasWings) // planes never stops, too long to implement
 					this.way=0;
 				}

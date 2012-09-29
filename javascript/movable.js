@@ -13,7 +13,7 @@ var Movable=new Class({
 	Extends: Sprite,
 	initialize: function(game, x, y, z, a, specs) {
 		this.parent(game, x, y, z, specs);
-		this.direction=0;
+		this.rotation=0;
 		this.a=a;
 		this.way=0;
 		this.speed=(specs.speed?specs.speed:0);
@@ -28,9 +28,9 @@ var Movable=new Class({
 		this.prevY=this.y;
 		this.prevA=this.a;
 		// Rotating
-		if(this.direction!=0)
+		if(this.rotation!=0)
 			{
-			this.a=(16+this.a+this.direction)%16;
+			this.a=(16+this.a+this.rotation)%16;
 			moved=true;
 			}
 		// Accelerating
@@ -67,11 +67,11 @@ var Movable=new Class({
 			this.declarePositions();
 		return moved;
 		},
-	setDirection : function(direction) {
-		if(direction==0||this.life<1)
-			this.direction=0;
+	setRotation : function(rotation) {
+		if(rotation==0||this.life<1)
+			this.rotation=0;
 		else
-			this.direction=direction;
+			this.rotation=rotation;
 		},
 	setWay : function(way) {
 		if(way==0||this.life<1)
