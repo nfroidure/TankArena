@@ -11,8 +11,8 @@
 
 var Circle=new Class({
 	Extends: Shape,
-	initialize: function(x, y, z, r, dx, dy, dz, cx, cy) {
-		this.parent(x, y, z, dx, dy, dz, cx, cy);
+	initialize: function(r, dx, dy, dz, cx, cy) {
+		this.parent(dx, dy, dz, cx, cy);
 		this.r=r;
 		},
 	hit : function(shape) {

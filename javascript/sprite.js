@@ -34,20 +34,19 @@ var Sprite=new Class({
 				switch(shapes[i].type)
 					{
 					case 'Circle':
-						this.shapes.push(new Circle(this.x,this.y,this.z, (shapes[i].r?shapes[i].r:12),
+						this.shapes.push(new Circle((shapes[i].r?shapes[i].r:12),
 							(shapes[i].dx?shapes[i].dx:0), (shapes[i].dy?shapes[i].dy:0),
 							(shapes[i].dz?shapes[i].dz:0), (shapes[i].cx?shapes[i].cx:0),
 							(shapes[i].cy?shapes[i].cy:0)));
 						break;
 					case 'Rectangle':
-						this.shapes.push(new Rectangle(this.x,this.y,this.z, (shapes[i].w?shapes[i].w:20),
+						this.shapes.push(new Rectangle((shapes[i].w?shapes[i].w:20),
 							(shapes[i].h?shapes[i].h:20), (shapes[i].dx?shapes[i].dx:0),
 							(shapes[i].dy?shapes[i].dy:0), (shapes[i].dz?shapes[i].dz:0),
 							(shapes[i].cx?shapes[i].cx:0), (shapes[i].cy?shapes[i].cy:0)));
 						break;
 					case 'Point':
-						this.shapes.push(new Point(this.x,this.y,this.z,
-							(shapes[i].dx?shapes[i].dx:0), (shapes[i].dy?shapes[i].dy:0),
+						this.shapes.push(new Point((shapes[i].dx?shapes[i].dx:0), (shapes[i].dy?shapes[i].dy:0),
 							(shapes[i].dz?shapes[i].dz:0), (shapes[i].cx?shapes[i].cx:0),
 							(shapes[i].cy?shapes[i].cy:0)));
 						break;

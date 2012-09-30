@@ -10,10 +10,10 @@
  */
 
 var Shape=new Class({
-	initialize: function(x, y, z, dx, dy, dz,cx,cy) {
-		this.x=x;
-		this.y=y;
-		this.z=z;
+	initialize: function(dx, dy, dz, cx, cy) {
+		this.x=0;
+		this.y=0;
+		this.z=0;
 		this.dx=(dx?dx:0);
 		this.dy=(dy?dy:0);
 		this.dz=(dz?dz:0);
