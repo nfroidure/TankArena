@@ -14,3 +14,6 @@ XXX CONTROLS XXX
 - +/- to change frame per seconds
 - Ctrl +/- to change zoom
 - Click to give a target to the tank, Crtl+click to queue a new target, Right click to cancel targets
+
+XXX Diagram XXX
+![UML Classes Diagram](https://github.com/nfroidure/TankArena/blob/master/uml/ClassesDiagram.png "Zoom the diagram")
