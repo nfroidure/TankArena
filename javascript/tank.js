@@ -104,50 +104,6 @@ var Tank=new Class({
 				}
 			}
 		},
-	target : function() {
-		if(this.game.controlableSprites[this.game.controlledSprite]!=this&&this.life&&!(this.targets[0] instanceof Target))
-			{
-			var nearSprites, pos, nearestSprite, nearestSpriteDistance,  currentSpriteDistance, a=-1;
-			// Getting near sprites
-			pos=this.index.split('-');
-			nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),(this.hasWings&&this.z?this.z:1)*this.detectionField);
-			// Trying to locate the nearest
-			for(var i=nearSprites.length-1; i>=0; i--)
-				{
-				if(nearSprites[i].team&&nearSprites[i].team!=this.team)
-					{
-					currentSpriteDistance=this.getVirtualDistance(nearSprites[i]);
-					if((!nearestSprite)||nearestSpriteDistance.distance>currentSpriteDistance)
-						{
-						nearestSpriteDistance=currentSpriteDistance;
-						nearestSprite=nearSprites[i];
-						}
-					}
-				}
-			// Attacking him
-			if(nearestSprite&&Math.sqrt(nearestSpriteDistance.distance)<this.detectionField*this.game.tileSize)
-				{
-				this.setTargets(nearestSprite);
-				a=this.parent(4*this.game.tileSize);
-				if(this.hasTurret)
-					{
-					if(a-this.ta<0)
-						this.turretRotation=-1;
-					else if(a-this.ta>0)
-						this.turretRotation=1;
-					else
-						this.turretRotation=0;
-					}
-				if(this.waitLoad==0&&this.rotation==0&&this.turretRotation==0)
-					{
-					// Should not fire if the anmo is more limited
-					this.fire();
-					}
-				}
-			return a;
-			}
-		return this.parent();
-		}, 
 	destruct : function() {
 		}
 });

@@ -69,6 +69,10 @@ var Controlable=new Class({
 			}
 		},
 	target : function(distanceMin) {
+		if(this.game.controlableSprites[this.game.controlledSprite]!=this&&((!this.targets.length)||!(this.targets[0] instanceof Target)))
+			{
+			this.locateTarget();
+			}
 		if(this.targets.length)
 			{
 			var vd=this.getVirtualDistance(this.targets[0]),
@@ -82,11 +86,49 @@ var Controlable=new Class({
 				this.rotation=-1;
 			// Going to the target
 			this.direction=1;
+			// Consider fighting
+			if(this.hasTurret)
+				{
+				if((16+this.a-a)%16==0)
+					this.turretRotation=0;
+				else if((16+this.a-a)%16>8)
+					this.turretRotation=1;
+				else
+					this.turretRotation=-1;
+				}
+			if((!(this.targets[0] instanceof Target))&&this.waitLoad==0&&this.rotation==0&&this.turretRotation==0)
+				{
+				// Should not fire if the anmo is more limited
+				this.fire();
+				}
 			return a;
 			}
 		else if(this.game.controlableSprites[this.game.controlledSprite]!=this&&!this.hasWings)
 			this.direction=0;
 		return -1;
+		},
+	locateTarget : function() {
+		var nearSprites, pos, nearestSprite=null, nearestSpriteDistance,  currentSpriteDistance;
+		// Getting near sprites
+		pos=this.index.split('-');
+		nearSprites=this.game.getNearSprites(this,parseInt(pos[0]),parseInt(pos[1]),(this.hasWings&&this.z?this.z:1)*this.detectionField);
+		// Trying to locate the nearest
+		for(var i=nearSprites.length-1; i>=0; i--)
+			{
+			if(nearSprites[i].team&&nearSprites[i].team!=this.team)
+				{
+				currentSpriteDistance=this.getVirtualDistance(nearSprites[i]);
+				if((!nearestSprite)||nearestSpriteDistance.distance>currentSpriteDistance)
+					{
+					nearestSpriteDistance=currentSpriteDistance;
+					nearestSprite=nearSprites[i];
+					}
+				}
+			}
+		if(nearestSprite&&Math.sqrt(nearestSpriteDistance.distance)<this.detectionField*this.game.tileSize)
+			{
+			this.setTargets(nearestSprite);
+			}
 		},
 	destruct : function() {
 		}
