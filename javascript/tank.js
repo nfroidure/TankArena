@@ -77,16 +77,29 @@ var Tank=new Class({
 			this.parent(power);
 			}
 		},
-	fire : function(secondary) {
-		if(this.life>0&&!this.waitLoad)
+	startFire : function(secondary) {
+		//if(anmo)
+			//this.game.playSound('empty');
+		//else
+		this.firing=true;
+		this.secondary=secondary;
+		},
+	endFire : function(secondary) {
+		this.firing=false;
+		},
+	fire : function() {
+		if(this.firing&&this.life>0&&!this.waitLoad)
 			{
 			var ta=(this.fireZones[this.curFireZone].a?this.fireZones[this.curFireZone].a:0)+this.ta;
 			var x=(Math.cos(ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
 			var y=(Math.sin(ta*Math.PI/8)*this.fireZones[this.curFireZone].r);
 			this.curFireZone=(this.curFireZone+1)%this.fireZones.length;
-			if(secondary)
+			if(this.secondary)
 				{
-				this.game.playSound('empty');
+				this.game.sprites.push(new Chain(this.game,this.x+x,this.y+y,this.z,this.ta,{'tank':this}));
+				this.game.playSound('chain');
+				this.game.drawImage(3, 4, 2, this.x-this.game.tileSize/2+x, this.y-this.game.tileSize/2+y, this.z, 1, 1);
+				this.waitLoad=3;
 				}
 			else
 				{

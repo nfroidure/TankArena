@@ -30,9 +30,14 @@ var Controlable=new Class({
 	move : function() {
 		// Computing targets
 		if(this.life)
+			{
 			this.target();
+			if(this.firing)
+				this.fire();
+			}
 		else
 			{
+			this.firing=false;
 			this.direction=0;
 			this.rotation=0;
 			}
@@ -53,6 +58,7 @@ var Controlable=new Class({
 		this.targets.push(target);
 		},
 	removeTarget : function(target) {
+		this.firing=false;
 		var index=this.targets.indexOf(target);
 		if(index>=0)
 			{
@@ -68,7 +74,9 @@ var Controlable=new Class({
 				this.direction=0;
 			}
 		},
-	target : function(distanceMin) {
+	target : function() {
+		if(this.targets.length&&!(this.targets[0] instanceof Target)&&this.targets[0].life<1)
+			this.removeTarget(this.targets[0]);
 		if(this.game.controlableSprites[this.game.controlledSprite]!=this&&((!this.targets.length)||!(this.targets[0] instanceof Target)))
 			{
 			this.locateTarget();
@@ -89,22 +97,32 @@ var Controlable=new Class({
 			// Consider fighting
 			if(this.hasTurret)
 				{
-				if((16+this.a-a)%16==0)
+				if((16+this.ta-a)%16==0)
 					this.turretRotation=0;
-				else if((16+this.a-a)%16>8)
+				else if((16+this.ta-a)%16>8)
 					this.turretRotation=1;
 				else
 					this.turretRotation=-1;
 				}
-			if((!(this.targets[0] instanceof Target))&&this.waitLoad==0&&this.rotation==0&&this.turretRotation==0)
+			if((!(this.targets[0] instanceof Target))&&this.waitLoad==0
+				&&this.rotation==0&&this.turretRotation==0
+				&&vd.distance<Math.pow(this.detectionField*this.game.tileSize,2))
 				{
 				// Should not fire if the anmo is more limited
-				this.fire();
+				this.firing=true;
+				}
+			else
+				{
+				this.firing=false;
 				}
 			return a;
 			}
-		else if(this.game.controlableSprites[this.game.controlledSprite]!=this&&!this.hasWings)
-			this.direction=0;
+		else if(this.game.controlableSprites[this.game.controlledSprite]!=this)
+			{
+			if(!this.hasWings)
+				this.direction=0;
+			this.firing=false;
+			}
 		return -1;
 		},
 	locateTarget : function() {

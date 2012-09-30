@@ -17,10 +17,11 @@ var Shot=new Class({
 		this.tank=specs.tank;
 		this.t=13;
 		this.maxSpeed=5;
-		this.speed=this.tank.speed+3;
+		this.speed=this.tank.speed+5;
 		this.acceleration=3;
 		this.direction=1;
 		this.range=80;
+		this.solidity=0;
 		},
 	move : function() {
 		if(this.range>0)

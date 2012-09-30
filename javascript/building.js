@@ -12,7 +12,6 @@
 var Building=new Class({
 	Extends: Sprite,
 	initialize: function(game, x, y, z, specs) {
-		specs.solidity=(specs.solidity?specs.solidity:3);
 		this.parent(game, x, y, z, specs);
 		this.t=(specs.t?specs.t:0);
 		this.w=this.game.tileSize;

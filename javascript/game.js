@@ -67,11 +67,11 @@ var Game=new Class({
 		this.controlableSprites=new Array();
 		this.controlledSprite=0;
 		this.sprites=new Array(new Tank(this,33,33,1,0,{'team':1,'t':13,'maxSpeed':3,'turret':true,'shapes':[{'type':'Rectangle','w':20,'h':20,'cx':10,'cy':10}]}),
-			new Tank(this,165,165,1,0,{'team':1,'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'a':Math.PI,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':10}]}),
-			new Tank(this,99,66,1,0,{'team':1,'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'shapes':[{'type':'Circle','dx':-2,'r':6},{'type':'Point','dx':9}]}),
+			new Tank(this,165,165,1,0,{'team':1,'t':14,'maxSpeed':4,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3*2},{'r':12,'a':Math.PI/3*2}],'a':Math.PI,'solidity':3,'shapes':[{'type':'Circle','dx':-5,'r':9},{'type':'Point','dx':10}]}),
+			new Tank(this,99,66,1,0,{'team':1,'t':15,'maxSpeed':7,'turret':false,'fireZones':[{'r':8,'a':-Math.PI/2}],'solidity':2,'shapes':[{'type':'Circle','dx':-2,'r':6},{'type':'Point','dx':9}]}),
 			new Tank(this,363,330,1,0,{'team':1,'t':26,'maxSpeed':1,'fireZones':[{'r':1}],'solidity':1,'shapes':[{'type':'Circle','r':2}],'solidity':1}),
 			new Tank(this,429,181,1,0,{'team':1,'t':12,'maxSpeed':16,'turret':false,'fireZones':[{'r':12,'a':-Math.PI/3},{'r':12,'a':Math.PI/3}],'solidity':1,'fly':true,'shapes':[{'type':'Circle','dx':-4,'r':11},{'type':'Point','dx':12}]}),
-			new Tank(this,3000,1320,1,0,{'team':2,'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'shapes':[{'type':'Circle','r':12}],'shapes':[{'type':'Circle','r':11}]}),
+			new Tank(this,3000,1320,1,0,{'team':2,'t':16,'maxSpeed':7,'turret':true,'fireZones':[{'r':8,'a':-Math.PI/2},{'r':8,'a':Math.PI/2}],'solidity':2,'shapes':[{'type':'Circle','r':12}],'shapes':[{'type':'Circle','r':11}]}),
 			new Tank(this,3030,690,1,0,{'team':2,'t':17,'maxSpeed':7,'turret':true,'fireZones':[{'r':10,'a':0}],'solidity':4,'shapes':[{'type':'Circle','r':11}]}),
 			new Tank(this,3060,660,1,0,{'team':2,'t':18,'maxSpeed':4,'turret':false,'fireZones':[{'r':5,'a':0}],'solidity':1,'shapes':[{'type':'Circle','r':4}]}),
 			new Tank(this,3090,630,1,0,{'team':2,'t':19,'maxSpeed':4,'turret':true,'fireZones':[{'r':10,'a':-Math.PI/3},{'r':10,'a':0},{'r':10,'a':Math.PI/3}],'solidity':3,'shapes':[{'type':'Circle','r':8}]}),
@@ -250,7 +250,8 @@ var Game=new Class({
 				{'i':0,'x':4,'y':36,'label':'Road 3'},
 				{'i':3,'x':0,'y':6,'label':'Shot'},
 				{'i':1,'x':1,'y':1,'label':'Hangar GV 2'},
-				{'i':1,'x':2,'y':1,'label':'Hangar GV 3'}];
+				{'i':1,'x':2,'y':1,'label':'Hangar GV 3'},
+				{'i':3,'x':0,'y':6,'label':'Chain'}];
 		this.images[n].src = uri;
 		this.loadingTiles++;
 		this.images[n].onload = this.tileImageLoaded.bind(this);
@@ -284,6 +285,14 @@ var Game=new Class({
 		this.registerSound('main',this.rootPath+'sounds/main.wav');
 		this.registerSound('empty',this.rootPath+'sounds/empty.wav');
 		this.registerSound('explode',this.rootPath+'sounds/expl.wav');
+		this.registerSound('beep',this.rootPath+'sounds/beep.wav');
+		this.registerSound('chain',this.rootPath+'sounds/chain.wav');
+		this.registerSound('ricoc1',this.rootPath+'sounds/ricoc1.wav');
+		this.registerSound('ricoc2',this.rootPath+'sounds/ricoc2.wav');
+		this.registerSound('ricoc3',this.rootPath+'sounds/ricoc3.wav');
+		this.registerSound('ricoc4',this.rootPath+'sounds/ricoc4.wav');
+		this.registerSound('ricoc5',this.rootPath+'sounds/ricoc5.wav');
+		this.registerSound('ricoc6',this.rootPath+'sounds/ricoc6.wav');
 		},
 	registerSound : function(sound, uri, loop) {
 		this.sounds[sound] = new Audio(uri);
@@ -397,6 +406,9 @@ var Game=new Class({
 			case 'right':
 				this.controlableSprites[this.controlledSprite].setRotation(1,e.control);
 				break;
+			case 'space':
+				this.controlableSprites[this.controlledSprite].startFire(e.control);
+				break;
 			case 'tab':
 				break;
 			default:
@@ -419,7 +431,7 @@ var Game=new Class({
 				this.controlableSprites[this.controlledSprite].setRotation(0);
 				break;
 			case 'space':
-				this.controlableSprites[this.controlledSprite].fire(e.control);
+				this.controlableSprites[this.controlledSprite].endFire();
 				break;
 			case 'tab':
 				this.changeControlledSprite(e.shift);
