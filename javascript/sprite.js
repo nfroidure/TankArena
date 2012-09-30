@@ -10,7 +10,8 @@
  */
 
 var Sprite=new Class({
-	initialize: function(game, x, y, z, specs) {
+	initialize: function(game, x, y, z, specs)
+		{
 		this.game = game;
 		this.tiles=new Array();
 		this.x=x;
@@ -57,7 +58,8 @@ var Sprite=new Class({
 		this.team=(specs.team?specs.team:0);
 		this.declarePositions();
 		},
-	declarePositions : function() {
+	declarePositions : function()
+		{
 		for(var i=this.shapes.length-1; i>=0; i--)
 			{
 			this.shapes[i].x=this.x-(this.shapes[i].cx?this.shapes[i].cx:0)+(this.shapes[i].dx?Math.cos(this.a*Math.PI/8)*this.shapes[i].dx:0)-(this.shapes[i].dy?Math.sin(this.a*Math.PI/8)*this.shapes[i].dy:0);
@@ -76,7 +78,75 @@ var Sprite=new Class({
 			this.index=newIndex;
 			}
 		},
-	hits : function() {
+	getVirtualDistance : function(sprite)
+		{
+		// Computing real distance
+		var virtualDistance={'distance':Math.pow(this.x-sprite.x,2) + Math.pow(this.y-sprite.y,2),
+			'x':sprite.x, 'y':sprite.y};
+		// Comparing with virtual distances
+		// x, y-h : top
+		var currentDistance=Math.pow(this.x-sprite.x,2)
+			+ Math.pow(this.y-(sprite.y-(this.game.map.h*this.game.tileSize)),2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x, 'y':sprite.y-(this.game.map.h*this.game.tileSize)};
+			}
+		// x+w, y-h : top-right
+		currentDistance=Math.pow(this.x-(sprite.x+(this.game.map.w*this.game.tileSize)),2)
+			+ Math.pow(this.y-(sprite.y-(this.game.map.h*this.game.tileSize)),2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x+(this.game.map.w*this.game.tileSize), 'y':sprite.y-(this.game.map.h*this.game.tileSize)};
+			}
+		// x+w, y : right
+		currentDistance=Math.pow(this.x-(sprite.x+(this.game.map.w*this.game.tileSize)),2)
+			+ Math.pow(this.y-sprite.y,2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x+(this.game.map.w*this.game.tileSize), 'y':sprite.y};
+			}
+		// x+w, y+h : bottom-right
+		currentDistance=Math.pow(this.x-(sprite.x+(this.game.map.w*this.game.tileSize)),2)
+			+ Math.pow(this.y-(sprite.y+(this.game.map.h*this.game.tileSize)),2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x+(this.game.map.w*this.game.tileSize), 'y':sprite.y+(this.game.map.h*this.game.tileSize)};
+			}
+		// x, y+h : bottom
+		currentDistance=Math.pow(this.x-sprite.x,2)
+			+ Math.pow(this.y-(sprite.y+(this.game.map.h*this.game.tileSize)),2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x, 'y':sprite.y+(this.game.map.h*this.game.tileSize)};
+			}
+		// x-w, y+h : bottom-left
+		currentDistance=Math.pow(this.x-(sprite.x-(this.game.map.w*this.game.tileSize)),2)
+			+ Math.pow(this.y-(sprite.y+(this.game.map.h*this.game.tileSize)),2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x-(this.game.map.w*this.game.tileSize), 'y':sprite.y+(this.game.map.h*this.game.tileSize)};
+			}
+		// x-w, y : left
+		currentDistance=Math.pow(this.x-(sprite.x-(this.game.map.w*this.game.tileSize)),2)
+			+ Math.pow(this.y-sprite.y,2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x-(this.game.map.w*this.game.tileSize), 'y':sprite.y};
+			}
+		// x-w, y-h : top-left
+		currentDistance=Math.pow(this.x-(sprite.x-(this.game.map.w*this.game.tileSize)),2)
+			+ Math.pow(this.y-(sprite.y-(this.game.map.h*this.game.tileSize)),2);
+		if(currentDistance<virtualDistance.distance)
+			{
+			virtualDistance={'distance':currentDistance, 'x':sprite.x-(this.game.map.w*this.game.tileSize), 'y':sprite.y-(this.game.map.h*this.game.tileSize)};
+			}
+		return virtualDistance;
+		},
+	getNearestSprite : function(ofTeams)
+		{
+		},
+	hits : function()
+		{
 		if(this.shapes.length)
 			{
 			var pos=this.index.split('-');
@@ -89,18 +159,23 @@ var Sprite=new Class({
 			}
 		return false;
 		},
-	hit : function(sprite) {
-		for(var i=this.shapes.length-1; i>=0; i--)
+	hit : function(sprite)
+		{
+		if(sprite.solidity)
 			{
-			for(var j=sprite.shapes.length-1; j>=0; j--)
+			for(var i=this.shapes.length-1; i>=0; i--)
 				{
-				if(this.shapes[i].hit(sprite.shapes[j]))
-					return true;
+				for(var j=sprite.shapes.length-1; j>=0; j--)
+					{
+					if(this.shapes[i].hit(sprite.shapes[j]))
+						return true;
+					}
 				}
 			}
 		return false;
 		},
-	damage : function(power) {
+	damage : function(power)
+		{
 		if(this.life>0)
 			{
 			this.life=this.life-Math.round(power/this.solidity);
@@ -110,14 +185,16 @@ var Sprite=new Class({
 			}
 		return false;
 		},
-	remove : function() {
+	remove : function()
+		{
 		var index=this.game.sprites.indexOf(this);
 		if(index>=0)
 			this.game.sprites.splice(index,1);
 		if(this.index!=-1)
 			this.game.grid[this.index].splice(this.game.grid[this.index].indexOf(this),1);
 		},
-	draw : function() {
+	draw : function()
+		{
 		this.game.contexts[this.game.numCanvas-1].fillStyle='#FFFFFF';
 		this.game.contexts[this.game.numCanvas-1].strokeStyle='#FFFFFF';
 		for(var i=this.shapes.length-1; i>=0; i--)
@@ -143,6 +220,7 @@ var Sprite=new Class({
 			this.game.contexts[this.game.numCanvas-1].closePath();
 			}
 		},
-	destruct : function() {
+	destruct : function()
+		{
 		}
 });

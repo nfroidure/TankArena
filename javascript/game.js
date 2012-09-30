@@ -147,12 +147,15 @@ var Game=new Class({
 				// Moving movable sprites
 				if(curSprite&&curSprite.move)
 					{
-					if(curSprite.move())
-						curSprite.hits();
+					curSprite.move();
 					}
-				// Drawing sprites
 				if(curSprite)
+					{
+					// Checking hits
+					curSprite.hits();
+					// Drawing sprites
 					curSprite.draw();
+					}
 				}
 			this.timer=this.main.delay(1000/this.fps, this);
 			}
@@ -334,8 +337,8 @@ var Game=new Class({
 	moveHandler : function(e) {
 		},
 	clickHandler : function(e) {
-		console.log({'x':this.decalX+e.page.x-this.canvas[0].getPosition().x,'y':this.decalY+e.page.y-this.canvas[0].getPosition().y});
-		console.log(this.controlableSprites[this.controlledSprite]);
+		//console.log({'x':this.decalX+e.page.x-this.canvas[0].getPosition().x,'y':this.decalY+e.page.y-this.canvas[0].getPosition().y});
+		//console.log(this.controlableSprites[this.controlledSprite]);
 		if(e.rightClick)
 			{
 			this.controlableSprites[this.controlledSprite].setTargets();
@@ -345,7 +348,9 @@ var Game=new Class({
 			}
 		else
 			{
-			this.controlableSprites[this.controlledSprite][e.control?'addTarget':'setTargets']({'x':(e.page.x-this.canvas[0].getPosition().x)/this.zoom,'y':(e.page.y-this.canvas[0].getPosition().y)/this.zoom});
+			var target=new Target(this,(e.page.x-this.canvas[0].getPosition().x)/this.zoom,(e.page.y-this.canvas[0].getPosition().y)/this.zoom,1,{'detectionField':5});
+			this.sprites.push(target);
+			this.controlableSprites[this.controlledSprite][e.control?'addTarget':'setTargets'](target);
 			this.controlableSprites[this.controlledSprite].setDirection(1);
 			}
 		},

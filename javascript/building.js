@@ -17,8 +17,8 @@ var Building=new Class({
 		this.t=(specs.t?specs.t:0);
 		this.w=this.game.tileSize;
 		this.h=this.game.tileSize;
-		this.declarePositions();
 		this.shapes.push(new Rectangle(this.x,this.y,this.z,this.w,this.h));
+		this.declarePositions();
 		},
 	draw : function() {
 		this.game.drawTile(this.game.map.floorSet[0], this.x, this.y, this.z);
