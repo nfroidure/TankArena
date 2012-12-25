@@ -1,0 +1,22 @@
+{
+	"name": "Tank Arena",
+	"description": "Web remake of the old MS-Dos game called Tank Arena.",
+	"version": "1",
+	"icons": {
+		"16": "icon-16.png",
+		"48": "icon-48.png",
+		"128": "icon-128.png"
+	},
+	"app": {
+		"urls": [
+			"http://tank.elitwork.com/index.html"
+		],
+		"launch": {
+			"web_url": "http://tank.elitwork.com/index.html"
+		}
+	},
+	"permissions": [
+		"unlimitedStorage"
+	],
+	"manifest_version": 2
+}
